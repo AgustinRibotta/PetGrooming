@@ -9,7 +9,7 @@ public class TestControler {
 
     @GetMapping("/")
     public String getMethodName() {
-        return new String("Se actualiza solo!!!!");
+        return new String("Spring Boot");
     }
     
 
