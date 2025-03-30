@@ -9,7 +9,7 @@ public class TestControler {
 
     @GetMapping("/")
     public String getMethodName() {
-        return new String("Hi, Sprinng Boot");
+        return new String("Se actualiza solo!!!!");
     }
     
 
