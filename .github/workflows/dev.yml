@@ -5,7 +5,7 @@ on:
     branches:
       - dev
     paths-ignore:
-      - 'backend/hairdressin/kubernetes/deployment.yaml'
+      - 'backEnd/hairdressin/kubernetes/deployment.yaml'
 
 
 jobs:
@@ -46,6 +46,7 @@ jobs:
       # Step 5: Compile the Java application (Maven)
       - name: Build Java application using Maven
         run: |
+          cd backEnd/hairdressin
           mvn clean install 
 
       # Step 6: Verify the VERSION variable is correctly passed
@@ -67,8 +68,8 @@ jobs:
       - name: Update Docker Image Version in Deployment YAML
         run: |
           VERSION=${{ env.VERSION }}
-          sed -i "s|agustinribotta/hairdresin-app:.*|agustinribotta/hairdresin-app:$VERSION|" backend/hairdressin/kubernetes/deployment.yaml
-          echo "" >> backend/hairdressin/kubernetes/deployment.yaml 
+          sed -i "s|agustinribotta/hairdresin-app:.*|agustinribotta/hairdresin-app:$VERSION|" backEnd/hairdressin/kubernetes/deployment.yaml
+          echo "" >> backEnd/hairdressin/kubernetes/deployment.yaml 
 
       # Step 10: Check if there are changes
       - name: Check if there are changes
@@ -82,10 +83,10 @@ jobs:
           git remote set-url origin https://github.com/AgustinRibotta/PetGrooming
 
           # Check if there are changes to commit
-          if git diff --quiet backend/hairdressin/kubernetes/deployment.yaml; then
+          if git diff --quiet backEnd/hairdressin/kubernetes/deployment.yaml; then
             echo "No changes to commit"
           else
-            git add backend/hairdressin/kubernetes/deployment.yaml
+            git add backEnd/hairdressin/kubernetes/deployment.yaml
             git commit -m "Update image to version $VERSION"
             git push origin main 
           fi
