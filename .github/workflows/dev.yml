@@ -16,18 +16,7 @@ jobs:
     steps:
 
       - name: Set environment variables
-        run: |
-          echo "DB_URL=${{ secrets.DB_URL }}" >> $GITHUB_ENV
-          echo "DB_USERNAME=${{ secrets.DB_USERNAME }}" >> $GITHUB_ENV
-          echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> $GITHUB_ENV
-          echo "SERVER_PORT=${{ secrets.SERVER_PORT }}" >> $GITHUB_ENV
-      
-      - name: Verify environment variables
-        run: |
-          echo "DB_URL=$DB_URL"
-          echo "DB_USERNAME=$DB_USERNAME"
-          echo "DB_PASSWORD=******"
-          echo "SERVER_PORT=$SERVER_PORT"
+        run: echo "The env is ${{ secret.DB_USERNAME }}
 
       # Step 1: Checkout the repository
       - name: Checkout Repository
