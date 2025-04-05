@@ -1,9 +1,13 @@
 FROM openjdk:17
 
-WORKDIR /haurdressin
+# Set the working directory
+WORKDIR /hairdressin
 
-COPY target/*.jar haurdressin.jar
+# Copy the jar file into the container
+COPY target/*.jar hairdressin.jar
 
-ENTRYPOINT [ "java", "-jar", "haurdressin.jar" ]
+# Run the application when the container starts
+ENTRYPOINT [ "java", "-jar", "hairdressin.jar" ]
 
+# Expose the port that the app will run on
 EXPOSE 8080

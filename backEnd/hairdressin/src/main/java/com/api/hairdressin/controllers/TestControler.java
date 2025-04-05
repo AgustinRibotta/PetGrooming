@@ -9,9 +9,8 @@ public class TestControler {
 
     @GetMapping("/")
     public String getMethodName() {
-        return new String("Spring Boot");
+        return new String("Chang the code");
     }
     
-
 
 }
