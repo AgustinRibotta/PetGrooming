@@ -17,18 +17,8 @@ jobs:
           DB_USERNAME: ${{ secrets.DB_USERNAME }}
           DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
           DB_URL: ${{ secrets.DB_URL }}
-          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
           SERVER_PORT: ${{ secrets.SERVER_PORT }}
-          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-        run: |
-          echo "DB_USERNAME: $DB_USERNAME"
-          echo "DB_PASSWORD: ${DB_PASSWORD:-Not set}"
-          echo "DB_URL: ${DB_URL:-Not set}"
-          echo "DOCKER_USERNAME: ${DOCKER_USERNAME:-Not set}"
-          echo "DOCKER_PASSWORD: ${DOCKER_PASSWORD:-Not set}"
-          echo "SERVER_PORT: ${SERVER_PORT:-Not set}"
-          echo "SSH_PRIVATE_KEY: ${SSH_PRIVATE_KEY:-Not set}"
+
     
       # Step 1: Checkout the repository
       - name: Checkout Repository
@@ -60,10 +50,10 @@ jobs:
           echo "VERSION=$VERSION" >> $GITHUB_ENV  
 
       # Step 5: Compile the Java application (Maven)
-#      - name: Build Java application using Maven
- #       run: |
-  #        cd backEnd/hairdressin
-   #       mvn clean install 
+      - name: Build Java application using Maven
+        run: |
+          cd backEnd/hairdressin
+          mvn clean install 
 
       # Step 6: Verify the VERSION variable is correctly passed
       - name: Verify VERSION variable
