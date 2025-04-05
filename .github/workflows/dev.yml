@@ -15,9 +15,10 @@ jobs:
     if: github.actor != 'github-actions[bot]'
 
     steps:
-
       - name: Set environment variables
-        run: echo "The env is ${{ secrets.DB_USERNAME }}"
+        env:
+          DB_USERNAME: ${{ secrets.DB_USERNAME }}
+        run: echo "The env is $DB_USERNAME"
 
       # Step 1: Checkout the repository
       - name: Checkout Repository
