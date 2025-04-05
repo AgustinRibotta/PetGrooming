@@ -17,7 +17,7 @@ jobs:
     steps:
 
       - name: Set environment variables
-        run: echo "The env is ${{ secret.DB_USERNAME }}
+        run: echo "The env is ${{ secrets.DB_USERNAME }}
 
       # Step 1: Checkout the repository
       - name: Checkout Repository
