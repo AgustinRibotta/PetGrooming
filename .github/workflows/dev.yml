@@ -69,10 +69,10 @@ jobs:
 
       - name: Update Docker Image Version in Deployment YAML
         run: |
-          cd backEnd/hairdressin
+          cd backEnd/hairdressin/kubernetes
           VERSION=${{ env.VERSION }}
-          sed -i "s|agustinribotta/hairdresin-app:.*|agustinribotta/hairdresin-app:$VERSION|" backEnd/hairdressin/kubernetes/deployment.yaml
-          echo "" >> backEnd/hairdressin/kubernetes/app-deployment.yaml 
+          sed -i "s|agustinribotta/hairdresin-app:.*|agustinribotta/hairdresin-app:$VERSION|" deployment.yaml
+          echo "" >> app-deployment.yaml  # Si necesitas hacer algo con este archivo también
 
       - name: Check if there are changes
         run: git status
