@@ -72,7 +72,7 @@ jobs:
           cd backEnd/hairdressin
           VERSION=${{ env.VERSION }}
           sed -i "s|agustinribotta/hairdresin-app:.*|agustinribotta/hairdresin-app:$VERSION|" backEnd/hairdressin/kubernetes/deployment.yaml
-          echo "" >> backEnd/hairdressin/kubernetes/deployment.yaml 
+          echo "" >> backEnd/hairdressin/kubernetes/app-deployment.yaml 
 
       - name: Check if there are changes
         run: git status
