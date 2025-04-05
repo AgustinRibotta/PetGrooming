@@ -6,7 +6,7 @@ on:
     branches:
       - dev
     paths-ignore:
-      - 'backEnd/hairdressin/kubernetes/deployment.yaml'
+      - 'backEnd/hairdressin/kubernetes/app-deployment.yaml'
 
 jobs:
   build:
