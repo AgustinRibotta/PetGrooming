@@ -24,11 +24,9 @@ jobs:
           echo "DB_URL: $DB_URL"
           echo "SERVER_PORT: $SERVER_PORT"
     
-      # Step 1: Checkout the repository
       - name: Checkout Repository
         uses: actions/checkout@v3
 
-      # Step 2: Check if the last commit was made by GitHub Actions
       - name: Check Last Commit Author
         run: |
           LAST_COMMIT_AUTHOR=$(git log -1 --pretty=format:'%an')
@@ -37,7 +35,6 @@ jobs:
             exit 0
           fi
 
-      # Step 3: Set up SSH key for Git authentication
       - name: Set up SSH key
         run: |
           mkdir -p ~/.ssh
@@ -45,7 +42,6 @@ jobs:
           chmod 600 ~/.ssh/id_ed25519
           ssh-keyscan github.com >> ~/.ssh/known_hosts
 
-      # Step 4: Generate a unique version using the current timestamp
       - name: Generate version using timestamp
         id: generate_version
         run: |
@@ -53,50 +49,42 @@ jobs:
           echo "Generated version: $VERSION"
           echo "VERSION=$VERSION" >> $GITHUB_ENV  
 
-      # Step 5: Compile the Java application (Maven)
       - name: Build Java application using Maven
         run: |
           cd backEnd/hairdressin
           mvn clean install 
 
-      # Step 6: Verify the VERSION variable is correctly passed
       - name: Verify VERSION variable
         run: echo "The generated version is:$VERSION"
         
-      # Step 7: Authenticate with Docker Hub
       - name: Authenticate with Docker Hub
         run: |
           echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
 
-      # Step 8: Build and push the Docker image
       - name: Build and Push Docker Image
         run: |
           docker build -t agustinribotta/hairdresin-app:$VERSION .
           docker push agustinribotta/hairdresin-app:$VERSION
 
-      # Step 9: Update the Kubernetes deployment file with the new image version
       - name: Update Docker Image Version in Deployment YAML
         run: |
           VERSION=${{ env.VERSION }}
           sed -i "s|agustinribotta/hairdresin-app:.*|agustinribotta/hairdresin-app:$VERSION|" backEnd/hairdressin/kubernetes/deployment.yaml
           echo "" >> backEnd/hairdressin/kubernetes/deployment.yaml 
 
-      # Step 10: Check if there are changes
       - name: Check if there are changes
         run: git status
 
-      # Step 11: Commit the changes and push to the repository
       - name: Commit and Push Changes
         run: |
           git config --global user.email "github-actions@github.com"
           git config --global user.name "GitHub Actions"
           git remote set-url origin https://github.com/AgustinRibotta/PetGrooming
 
-          # Check if there are changes to commit
           if git diff --quiet backEnd/hairdressin/kubernetes/deployment.yaml; then
             echo "No changes to commit"
           else
             git add backEnd/hairdressin/kubernetes/deployment.yaml
             git commit -m "Update image to version $VERSION"
-            git push origin main 
+            git push origin dev
           fi
