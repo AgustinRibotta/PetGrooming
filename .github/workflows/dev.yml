@@ -81,7 +81,7 @@ jobs:
         run: |
           git config --global user.email "github-actions@github.com"
           git config --global user.name "GitHub Actions"
-          git remote set-url origin dev git@github.com:AgustinRibotta/PetGrooming.git
+          git remote set-url origin git@github.com:AgustinRibotta/PetGrooming.git
 
           if git diff --quiet backEnd/hairdressin/kubernetes/app-deployment.yaml; then
             echo "No changes to commit"
