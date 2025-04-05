@@ -83,10 +83,10 @@ jobs:
           git config --global user.name "GitHub Actions"
           git remote set-url origin https://github.com/AgustinRibotta/PetGrooming
 
-          if git diff --quiet backEnd/hairdressin/kubernetes/deployment.yaml; then
+          if git diff --quiet backEnd/hairdressin/kubernetes/app-deployment.yaml; then
             echo "No changes to commit"
           else
-            git add backEnd/hairdressin/kubernetes/deployment.yaml
+            git add backEnd/hairdressin/kubernetes/app-deployment.yaml
             git commit -m "Update image to version $VERSION"
             git push origin dev
           fi
