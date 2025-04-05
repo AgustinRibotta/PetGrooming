@@ -15,10 +15,16 @@ jobs:
     if: github.actor != 'github-actions[bot]'
 
     steps:
-      - name: Debug runner environment
-        run: env  # Print all environment variables to debug
-
-
+      - name: Check environment variables
+        run: |
+          echo "DB_USERNAME: ${DB_USERNAME:-Not set}"
+          echo "DB_PASSWORD: ${DB_PASSWORD:-Not set}"
+          echo "DB_URL: ${DB_URL:-Not set}"
+          echo "DOCKER_USERNAME: ${DOCKER_USERNAME:-Not set}"
+          echo "DOCKER_PASSWORD: ${DOCKER_PASSWORD:-Not set}"
+          echo "SERVER_PORT: ${SERVER_PORT:-Not set}"
+          echo "SSH_PRIVATE_KEY: ${SSH_PRIVATE_KEY:-Not set}"
+    
       # Step 1: Checkout the repository
       - name: Checkout Repository
         uses: actions/checkout@v3
