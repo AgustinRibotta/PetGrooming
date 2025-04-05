@@ -69,6 +69,7 @@ jobs:
 
       - name: Update Docker Image Version in Deployment YAML
         run: |
+          cd backEnd/hairdressin
           VERSION=${{ env.VERSION }}
           sed -i "s|agustinribotta/hairdresin-app:.*|agustinribotta/hairdresin-app:$VERSION|" backEnd/hairdressin/kubernetes/deployment.yaml
           echo "" >> backEnd/hairdressin/kubernetes/deployment.yaml 
