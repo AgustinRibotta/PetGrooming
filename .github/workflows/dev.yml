@@ -71,7 +71,7 @@ jobs:
         run: |
           cd backEnd/hairdressin/kubernetes
           VERSION=${{ env.VERSION }}
-          sed -i "s|agustinribotta/hairdresin-app:.*|agustinribotta/hairdresin-app:$VERSION|" deployment.yaml
+          sed -i "s|agustinribotta/hairdresin-app:.*|agustinribotta/hairdresin-app:$VERSION|" app-deployment.yaml
           echo "" >> app-deployment.yaml  # Si necesitas hacer algo con este archivo también
 
       - name: Check if there are changes
