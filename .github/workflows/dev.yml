@@ -15,10 +15,9 @@ jobs:
     if: github.actor != 'github-actions[bot]'
 
     steps:
-      - name: Set environment variables
-        env:
-          DB_USERNAME: ${{ secrets.DB_USERNAME }}
-        run: echo "The env is $DB_USERNAME"
+      - name: Debug runner environment
+        run: env  # Print all environment variables to debug
+
 
       # Step 1: Checkout the repository
       - name: Checkout Repository
@@ -50,10 +49,10 @@ jobs:
           echo "VERSION=$VERSION" >> $GITHUB_ENV  
 
       # Step 5: Compile the Java application (Maven)
-      - name: Build Java application using Maven
-        run: |
-          cd backEnd/hairdressin
-          mvn clean install 
+#      - name: Build Java application using Maven
+ #       run: |
+  #        cd backEnd/hairdressin
+   #       mvn clean install 
 
       # Step 6: Verify the VERSION variable is correctly passed
       - name: Verify VERSION variable
