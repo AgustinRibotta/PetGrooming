@@ -1,4 +1,5 @@
 spring:
+
   datasource:
     url: ${DB_URL}
     username: ${DB_USERNAME}
@@ -6,7 +7,7 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: validate
-      
+      ddl-auto: update
+
 server:
   port: ${SERVER_PORT}
