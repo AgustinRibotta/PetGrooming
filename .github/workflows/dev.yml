@@ -8,16 +8,21 @@ on:
     paths-ignore:
       - 'backEnd/hairdressin/kubernetes/deployment.yaml'
 
-
 jobs:
-  update-image-version:
+  build:
     runs-on: ubuntu-latest
-    if: github.actor != 'github-actions[bot]'
-
     steps:
-      - name: Check environment variables
+      - name: Set environment variables from secrets
+        env:
+          DB_USERNAME: ${{ secrets.DB_USERNAME }}
+          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+          DB_URL: ${{ secrets.DB_URL }}
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+          SERVER_PORT: ${{ secrets.SERVER_PORT }}
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
         run: |
-          echo "DB_USERNAME: ${DB_USERNAME:-Not set}"
+          echo "DB_USERNAME: $DB_USERNAME"
           echo "DB_PASSWORD: ${DB_PASSWORD:-Not set}"
           echo "DB_URL: ${DB_URL:-Not set}"
           echo "DOCKER_USERNAME: ${DOCKER_USERNAME:-Not set}"
