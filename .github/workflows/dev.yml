@@ -18,7 +18,11 @@ jobs:
           DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
           DB_URL: ${{ secrets.DB_URL }}
           SERVER_PORT: ${{ secrets.SERVER_PORT }}
-        run: echo "Creating enviroment variables"
+        run: |
+          echo "DB_USERNAME: $DB_USERNAME"
+          echo "DB_PASSWORD: $DB_PASSWORD"
+          echo "DB_URL: $DB_URL"
+          echo "SERVER_PORT: $SERVER_PORT"
     
       # Step 1: Checkout the repository
       - name: Checkout Repository
