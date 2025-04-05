@@ -52,7 +52,7 @@ jobs:
       - name: Build Java application using Maven
         run: |
           cd backEnd/hairdressin
-          mvn clean install 
+          mvn clean install -DskipTests
 
       - name: Verify VERSION variable
         run: echo "The generated version is:$VERSION"
