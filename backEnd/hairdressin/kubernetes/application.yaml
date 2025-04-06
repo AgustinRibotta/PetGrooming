@@ -14,7 +14,7 @@ spec:
     path: backEnd/hairdressin/kubernetes
   destination:
     server: https://kubernetes.default.svc
-    namespace: petApp-dev
+    namespace: petapp-dev
   syncPolicy:
     automated:
       prune: true
