@@ -10,7 +10,7 @@ spec:
   project: default
   source:
     repoURL: https://github.com/AgustinRibotta/PetGrooming
-    targetRevision: main
+    targetRevision: dev
     path: backEnd/hairdressin/kubernetes
   destination:
     server: https://kubernetes.default.svc
