@@ -16,7 +16,14 @@ public class PetDTO {
     private String race;
     private String color;
     private String allergic;
-    private String special_attention;
+    private String specialAttention;
     private String observations;
 
+    @Override
+    public String toString() {
+        return "PetDTO{id=" + id + ", name='" + name + "', race='" + race + "', color='" + color + "', allergic='" + allergic + "', special_attention='" + specialAttention + "', observations='" + observations + "'}";
+    }
+
 }
+
+

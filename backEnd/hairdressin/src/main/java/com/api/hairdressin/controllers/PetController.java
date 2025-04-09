@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.api.hairdressin.dto.PetDTO;
 import com.api.hairdressin.entity.Pet;
 import com.api.hairdressin.service.PetService;
 
@@ -26,14 +27,14 @@ public class PetController {
     private PetService petservice;
 
     @GetMapping()
-    private ResponseEntity<List<Pet>> finAllPet () {
-        List<Pet> pets = petservice.finAll();
+    private ResponseEntity<List<PetDTO>> findAllPet () {
+        List<PetDTO> pets = petservice.findAll();
         return ResponseEntity.status(HttpStatus.OK).body(pets);
     };
 
     @GetMapping("/{id}")
     private ResponseEntity<?> findPetById(@PathVariable Long id) {
-        Pet pet = petservice.finById(id);
+        PetDTO pet = petservice.findById(id);
     
         if (pet == null) {
         Map<String, String> errorResponse = new HashMap<>();
