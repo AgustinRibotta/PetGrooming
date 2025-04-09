@@ -8,8 +8,9 @@ public interface PetService {
     
     List<Pet> finAll();
     Pet finById(Long id);
-    Boolean existsById();
+    Boolean existsById(Long id);
     Pet save(Pet pet);
     Boolean delteById(Long id);
     List<Pet> findByOneOwnerId(Long ownerid);
+    
 }
