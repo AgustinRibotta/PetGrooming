@@ -40,28 +40,45 @@ public class PetServiceImp implements PetService {
     public PetDTO findById(Long id) {
         Optional<Pet> pet = petRepository.findById(id);
         return pet.map( p -> new PetDTO(
-                             p.getId(), 
-                             p.getName(), 
-                             p.getRace(), 
-                             p.getColor(), 
-                             p.getAllergic(),
-                             p.getSpecial_attention(), 
-                             p.getObservations()
+                            p.getId(), 
+                            p.getName(), 
+                            p.getRace(), 
+                            p.getColor(), 
+                            p.getAllergic(),
+                            p.getSpecial_attention(), 
+                            p.getObservations()
                          )).orElse(null);
     }
 
     @Override
     public Boolean existsById(Long id) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'existsById'");
+        return petRepository.existsById(id);
     }
 
     @Override
-    public PetDTO save(PetDTO pet) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'save'");
-    }
+    public PetDTO save(PetDTO petDTO) {
 
+        Pet pet = new Pet();
+        pet.setName(petDTO.getName());
+        pet.setRace(petDTO.getRace());
+        pet.setColor(petDTO.getColor());
+        pet.setAllergic(petDTO.getAllergic());
+        pet.setSpecial_attention(petDTO.getSpecialAttention());
+        pet.setObservations(petDTO.getObservations());
+    
+        Pet savedPet = petRepository.save(pet);
+    
+        return new PetDTO(
+            savedPet.getId(),
+            savedPet.getName(),
+            savedPet.getRace(),
+            savedPet.getColor(),
+            savedPet.getAllergic(),
+            savedPet.getSpecial_attention(),
+            savedPet.getObservations()
+        );
+    }
+    
     @Override
     public Boolean delteById(Long id) {
         // TODO Auto-generated method stub
