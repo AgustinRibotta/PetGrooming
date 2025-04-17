@@ -14,11 +14,13 @@ import org.springframework.web.bind.annotation.RestController;
 import com.api.hairdressin.dto.PetDTO;
 import com.api.hairdressin.service.PetService;
 
-
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.PutMapping;
+
 
 
 @RestController
@@ -26,17 +28,17 @@ import org.springframework.web.bind.annotation.RequestBody;
 public class PetController {
 
     @Autowired
-    private PetService petservice;
+    private PetService petService;
 
     @GetMapping()
     private ResponseEntity<List<PetDTO>> findAllPet () {
-        List<PetDTO> pets = petservice.findAll();
+        List<PetDTO> pets = petService.findAll();
         return ResponseEntity.status(HttpStatus.OK).body(pets);
     };
 
     @GetMapping("/{id}")
     private ResponseEntity<?> findPetById(@PathVariable Long id) {
-        PetDTO pet = petservice.findById(id);
+        PetDTO pet = petService.findById(id);
     
         if (pet == null) {
         Map<String, String> errorResponse = new HashMap<>();
@@ -49,18 +51,50 @@ public class PetController {
     @PostMapping("/{id}")
     private ResponseEntity<?> savedPet (@PathVariable Long id, @RequestBody PetDTO pet ){
         
-        if (petservice.existsById(id)){
+        if (petService.existsById(id)){
             Map<String, String> errorResponse = new HashMap<>();
                 errorResponse.put("message", "Pet with id " + id + " already exists.");
                 return ResponseEntity.status(HttpStatus.CONFLICT).body(errorResponse);
         }
         
-        PetDTO savedPet = petservice.save(pet);
+        PetDTO savedPet = petService.save(pet);
         
         URI location = URI.create("/api/pets/" + id);
         return ResponseEntity.created(location).body(savedPet);    
 
     };
+
+    @PutMapping("/{id}")
+    public ResponseEntity<?> putPet(@PathVariable Long id, @RequestBody PetDTO pet) {
+
+        if (!petService.existsById(id)){
+            Map<String, String> errorResponse = new HashMap<>();
+                errorResponse.put("message", "Pet with id " + id + " does not exist.");
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
+        }
+
+        pet.setId(id); 
+        PetDTO updatedPet = petService.save(pet);
+
+        return ResponseEntity.ok(updatedPet);  
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deletePet(@PathVariable Long id) {
+    
+        if (!petService.existsById(id)) {
+            Map<String, String> errorResponse = new HashMap<>();
+            errorResponse.put("message", "Pet with id " + id + " does not exist.");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
+        }
+    
+        petService.deleteById(id);
+    
+        Map<String, String> deleteResponse = new HashMap<>();
+        deleteResponse.put("message", "Pet with id " + id + " was deleted.");
+    
+        return ResponseEntity.accepted().body(deleteResponse);
+    }
 
     
 }

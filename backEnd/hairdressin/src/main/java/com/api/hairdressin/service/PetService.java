@@ -10,7 +10,6 @@ public interface PetService {
     PetDTO findById(Long id);
     Boolean existsById(Long id);
     PetDTO save(PetDTO pet);
-    Boolean delteById(Long id);
-    List<PetDTO> findByOneOwnerId(Long ownerid);
+    void deleteById(Long id);
     
 }

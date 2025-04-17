@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.api.hairdressin.dto.PetDTO;
+import com.api.hairdressin.entity.Owner;
 import com.api.hairdressin.entity.Pet;
 import com.api.hairdressin.repository.PetRepository;
 import com.api.hairdressin.service.PetService;
@@ -22,6 +23,7 @@ public class PetServiceImp implements PetService {
     @Override
     public List<PetDTO> findAll() {
         Iterable<Pet> pets = petRepository.findAll();  
+        
         return StreamSupport.stream(pets.spliterator(), false)  
                             .map(pet -> new PetDTO(  
                                 pet.getId(),
@@ -30,15 +32,16 @@ public class PetServiceImp implements PetService {
                                 pet.getColor(),
                                 pet.getAllergic(),
                                 pet.getSpecial_attention(),
-                                pet.getObservations()
+                                pet.getObservations(),
+                                pet.getOneOwner() != null ? pet.getOneOwner().getId() : null
                             ))
                             .collect(Collectors.toList());  
     }
-    
 
     @Override
     public PetDTO findById(Long id) {
         Optional<Pet> pet = petRepository.findById(id);
+
         return pet.map( p -> new PetDTO(
                             p.getId(), 
                             p.getName(), 
@@ -46,7 +49,9 @@ public class PetServiceImp implements PetService {
                             p.getColor(), 
                             p.getAllergic(),
                             p.getSpecial_attention(), 
-                            p.getObservations()
+                            p.getObservations(),
+                            p.getOneOwner() != null ? p.getOneOwner().getId() : null
+
                          )).orElse(null);
     }
 
@@ -65,6 +70,13 @@ public class PetServiceImp implements PetService {
         pet.setAllergic(petDTO.getAllergic());
         pet.setSpecial_attention(petDTO.getSpecialAttention());
         pet.setObservations(petDTO.getObservations());
+
+        if (petDTO.getOwnerId() != null) {
+            Owner owner = ownerRepository.finById(petDTO.getOwnerId()).orElseThrow(() -> new RuntimeException("Owner with ID " + petDTO.getOwnerId() + " not found"));
+            pet.setOneOwner(owner);
+        } else {
+            throw new RuntimeException("Owner ID must not be null.");
+        }
     
         Pet savedPet = petRepository.save(pet);
     
@@ -76,19 +88,14 @@ public class PetServiceImp implements PetService {
             savedPet.getAllergic(),
             savedPet.getSpecial_attention(),
             savedPet.getObservations()
+            savedPet.getOneOwner().getId()
         );
     }
     
     @Override
-    public Boolean delteById(Long id) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'delteById'");
+    public void deleteById(Long id) {
+        petRepository.deleteById(id);
     }
 
-    @Override
-    public List<PetDTO> findByOneOwnerId(Long ownerid) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'findByOneOwnerId'");
-    }
 
 }

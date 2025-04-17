@@ -18,10 +18,11 @@ public class PetDTO {
     private String allergic;
     private String specialAttention;
     private String observations;
+    private Long ownerId;
 
     @Override
     public String toString() {
-        return "PetDTO{id=" + id + ", name='" + name + "', race='" + race + "', color='" + color + "', allergic='" + allergic + "', special_attention='" + specialAttention + "', observations='" + observations + "'}";
+        return "PetDTO{id=" + id + ", name='" + name + "', race='" + race + "', color='" + color + "', allergic='" + allergic + "', special_attention='" + specialAttention + "', observations='" + observations +   "', ownerId=" + ownerId + "}";
     }
 
 }
