@@ -48,18 +48,12 @@ public class PetController {
             return ResponseEntity.ok(pet);
     };
 
-    @PostMapping("/{id}")
-    private ResponseEntity<?> savedPet (@PathVariable Long id, @RequestBody PetDTO pet ){
-        
-        if (petService.existsById(id)){
-            Map<String, String> errorResponse = new HashMap<>();
-                errorResponse.put("message", "Pet with id " + id + " already exists.");
-                return ResponseEntity.status(HttpStatus.CONFLICT).body(errorResponse);
-        }
+    @PostMapping()
+    private ResponseEntity<?> savedPet (@RequestBody PetDTO pet ){
         
         PetDTO savedPet = petService.save(pet);
         
-        URI location = URI.create("/api/pets/" + id);
+        URI location = URI.create("/api/pets/" + savedPet.getId());
         return ResponseEntity.created(location).body(savedPet);    
 
     };
@@ -96,5 +90,4 @@ public class PetController {
         return ResponseEntity.accepted().body(deleteResponse);
     }
 
-    
 }

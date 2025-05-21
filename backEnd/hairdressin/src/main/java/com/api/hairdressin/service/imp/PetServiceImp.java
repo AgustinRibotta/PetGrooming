@@ -7,18 +7,20 @@ import java.util.stream.StreamSupport;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.api.hairdressin.dto.PetDTO;
-import com.api.hairdressin.entity.Owner;
 import com.api.hairdressin.entity.Pet;
 import com.api.hairdressin.repository.PetRepository;
 import com.api.hairdressin.service.PetService;
+
 
 @Service
 public class PetServiceImp implements PetService {
 
     @Autowired
     private PetRepository petRepository;
+
 
     @Override
     public List<PetDTO> findAll() {
@@ -71,11 +73,8 @@ public class PetServiceImp implements PetService {
         pet.setSpecial_attention(petDTO.getSpecialAttention());
         pet.setObservations(petDTO.getObservations());
 
-        if (petDTO.getOwnerId() != null) {
-            Owner owner = ownerRepository.finById(petDTO.getOwnerId()).orElseThrow(() -> new RuntimeException("Owner with ID " + petDTO.getOwnerId() + " not found"));
-            pet.setOneOwner(owner);
-        } else {
-            throw new RuntimeException("Owner ID must not be null.");
+        if (petRepository.existsByNameAndOneOwnerId(petDTO.getName(), petDTO.getOwnerId())) {
+            throw new RuntimeException("Pet with the same name already exists for this owner.");
         }
     
         Pet savedPet = petRepository.save(pet);
@@ -87,15 +86,15 @@ public class PetServiceImp implements PetService {
             savedPet.getColor(),
             savedPet.getAllergic(),
             savedPet.getSpecial_attention(),
-            savedPet.getObservations()
+            savedPet.getObservations(),
             savedPet.getOneOwner().getId()
         );
     }
     
+    @Transactional
     @Override
     public void deleteById(Long id) {
         petRepository.deleteById(id);
     }
-
 
 }
