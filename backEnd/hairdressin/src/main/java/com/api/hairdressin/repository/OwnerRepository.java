@@ -6,4 +6,5 @@ import com.api.hairdressin.entity.Owner;
 
 public interface OwnerRepository extends CrudRepository < Owner, Long > {
 
+    Boolean existsByPhoneNumberAndName(String phoneNumber, String name);
 }

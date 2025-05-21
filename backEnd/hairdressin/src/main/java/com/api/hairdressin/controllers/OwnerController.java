@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.api.hairdressin.dto.OwnerDTO;
+import com.api.hairdressin.dto.OwnerDetailDTO;
 import com.api.hairdressin.service.OwnerService;
 
 @RestController
@@ -24,13 +25,13 @@ public class OwnerController {
 
     @GetMapping()
     private ResponseEntity<List<OwnerDTO>> findAllOwner () {
-        List<OwnerDTO> owner = ownerService.finAll();
+        List<OwnerDTO> owner = ownerService.findAll();
         return ResponseEntity.status(HttpStatus.OK).body(owner);
     }
 
     @GetMapping("/{id}")
     private ResponseEntity<?> findOwnserById(@PathVariable Long id) {
-        OwnerDTO owner = ownerService.finById(id);
+        OwnerDetailDTO owner = ownerService.findById(id);
 
         if (owner == null) {
             Map<String, String> errorResponse = new HashMap<>();
