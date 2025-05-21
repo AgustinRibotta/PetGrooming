@@ -42,10 +42,10 @@ public class PetController {
     
         if (pet == null) {
         Map<String, String> errorResponse = new HashMap<>();
-            errorResponse.put("message", "Pet with id " + id + " not found.");
+            errorResponse.put("message", "Pet with id " + id + " not found");
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
         }
-            return ResponseEntity.ok(pet);
+        return ResponseEntity.ok(pet);
     };
 
     @PostMapping()

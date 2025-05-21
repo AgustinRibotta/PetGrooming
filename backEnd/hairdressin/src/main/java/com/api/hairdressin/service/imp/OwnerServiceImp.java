@@ -1,6 +1,7 @@
 package com.api.hairdressin.service.imp;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -35,8 +36,14 @@ public class OwnerServiceImp implements OwnerService {
 
     @Override
     public OwnerDTO finById(Long id) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'finById'");
+        Optional<Owner> owner = ownerRepository.findById(id);
+
+        return owner.map( o -> new OwnerDTO(
+            o.getId(), 
+            o.getName(), 
+            o.getPhoneNumber(), 
+            o.getPets()
+            )).orElse(null);
     }
 
     @Override
