@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.api.hairdressin.dto.PetDTO;
 import com.api.hairdressin.service.PetService;
 
+import jakarta.validation.Valid;
+
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -49,7 +51,7 @@ public class PetController {
     };
 
     @PostMapping()
-    private ResponseEntity<?> savedPet (@RequestBody PetDTO pet ){
+    private ResponseEntity<?> savedPet (@Valid @RequestBody PetDTO pet ){
         
         PetDTO savedPet = petService.save(pet);
         
@@ -59,7 +61,7 @@ public class PetController {
     };
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> putPet(@PathVariable Long id, @RequestBody PetDTO pet) {
+    public ResponseEntity<?> putPet(@Valid @PathVariable Long id, @RequestBody PetDTO pet) {
 
         if (!petService.existsById(id)){
             Map<String, String> errorResponse = new HashMap<>();

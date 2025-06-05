@@ -92,8 +92,7 @@ public class OwnerServiceImp implements OwnerService {
 
     @Override
     public void deleteById(Long id) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'deleteById'");
+        ownerRepository.deleteById(id);
     }
 
 

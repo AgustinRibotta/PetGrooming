@@ -10,7 +10,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.api.hairdressin.dto.PetDTO;
+import com.api.hairdressin.entity.Owner;
 import com.api.hairdressin.entity.Pet;
+import com.api.hairdressin.repository.OwnerRepository;
 import com.api.hairdressin.repository.PetRepository;
 import com.api.hairdressin.service.PetService;
 
@@ -20,6 +22,9 @@ public class PetServiceImp implements PetService {
 
     @Autowired
     private PetRepository petRepository;
+
+    @Autowired
+    private OwnerRepository ownerRepository;
 
 
     @Override
@@ -65,6 +70,13 @@ public class PetServiceImp implements PetService {
     @Override
     public PetDTO save(PetDTO petDTO) {
 
+        Owner owner = ownerRepository.findById(petDTO.getOwnerId())
+            .orElseThrow(() -> new RuntimeException("Owner not found with ID: " + petDTO.getOwnerId()));
+
+        if (petRepository.existsByNameAndOneOwnerId(petDTO.getName(), petDTO.getOwnerId())) {
+            throw new RuntimeException("Pet with the same name already exists for this owner.");
+        }
+
         Pet pet = new Pet();
         pet.setName(petDTO.getName());
         pet.setRace(petDTO.getRace());
@@ -72,13 +84,10 @@ public class PetServiceImp implements PetService {
         pet.setAllergic(petDTO.getAllergic());
         pet.setSpecial_attention(petDTO.getSpecialAttention());
         pet.setObservations(petDTO.getObservations());
+        pet.setOneOwner(owner);  
 
-        if (petRepository.existsByNameAndOneOwnerId(petDTO.getName(), petDTO.getOwnerId())) {
-            throw new RuntimeException("Pet with the same name already exists for this owner.");
-        }
-    
         Pet savedPet = petRepository.save(pet);
-    
+
         return new PetDTO(
             savedPet.getId(),
             savedPet.getName(),
@@ -90,7 +99,8 @@ public class PetServiceImp implements PetService {
             savedPet.getOneOwner().getId()
         );
     }
-    
+
+
     @Transactional
     @Override
     public void deleteById(Long id) {

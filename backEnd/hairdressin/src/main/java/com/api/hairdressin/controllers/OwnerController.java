@@ -8,9 +8,11 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -19,8 +21,12 @@ import com.api.hairdressin.dto.OwnerDTO;
 import com.api.hairdressin.dto.OwnerDetailDTO;
 import com.api.hairdressin.service.OwnerService;
 
+import jakarta.validation.Valid;
+
+
 @RestController
 @RequestMapping("/api/owner")
+
 public class OwnerController {
 
     @Autowired
@@ -38,20 +44,53 @@ public class OwnerController {
 
         if (owner == null) {
             Map<String, String> errorResponse = new HashMap<>();
-            errorResponse.put("message", "Owner with id " + id + "not found");
+            errorResponse.put("message", "Owner with id " + id + " not found");
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
         }
         return ResponseEntity.ok(owner);
     }
 
     @PostMapping()
-    private ResponseEntity<?> saveOwner (@RequestBody OwnerDTO onwer){
+    private ResponseEntity<?> saveOwner (@Valid @RequestBody OwnerDTO onwer){
 
         OwnerDTO saveOwner = ownerService.save(onwer);
         URI location = URI.create("/api/owner/" + saveOwner.getId());
          
 
         return ResponseEntity.created(location).body(saveOwner);
+    }
+
+    
+    @PutMapping("/{id}")
+    public ResponseEntity<?> putOwner(@Valid @PathVariable Long id, @RequestBody OwnerDTO owner) {
+
+        if (!ownerService.existsById(id)){
+            Map<String, String> errorResponse = new HashMap<>();
+                errorResponse.put("message", "Owner with id " + id + " does not exist.");
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
+        }
+
+        owner.setId(id); 
+        OwnerDTO updatedOwner = ownerService.save(owner);
+
+        return ResponseEntity.ok(updatedOwner);  
+    }
+
+
+    @DeleteMapping("/{id}")
+    private ResponseEntity<?> deleteOwner (@PathVariable Long id) {
+        if (!ownerService.existsById(id)) {
+            Map<String, String> errorResponse = new HashMap<>();
+            errorResponse.put("message", "Owner with id " + id + " does not exist.");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
+        }
+    
+        ownerService.deleteById(id);
+    
+        Map<String, String> deleteResponse = new HashMap<>();
+        deleteResponse.put("message", "Owner with id " + id + " was deleted.");
+    
+        return ResponseEntity.accepted().body(deleteResponse);
     }
 
 }
