@@ -11,7 +11,7 @@ spec:
   source:
     repoURL: https://github.com/AgustinRibotta/PetGrooming
     targetRevision: dev
-    path: backEnd/hairdressin/kubernetes
+    path: kubernetes
   destination:
     server: https://kubernetes.default.svc
     namespace: petapp-dev
