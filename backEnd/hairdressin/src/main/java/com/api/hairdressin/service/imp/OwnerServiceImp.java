@@ -81,7 +81,11 @@ public class OwnerServiceImp implements OwnerService {
 
         Owner saveOwner = ownerRepository.save(owner);
 
-        return null;
+        return new OwnerDTO(
+            saveOwner.getId(), 
+            saveOwner.getName(), 
+            saveOwner.getPhoneNumber(), 
+            saveOwner.getPets() != null ? saveOwner.getPets().size() : 0);
 
         
     }
