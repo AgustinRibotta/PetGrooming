@@ -25,7 +25,7 @@ import jakarta.validation.Valid;
 
 
 @RestController
-@RequestMapping("/api/owner")
+@RequestMapping("/api/owners")
 
 public class OwnerController {
 
