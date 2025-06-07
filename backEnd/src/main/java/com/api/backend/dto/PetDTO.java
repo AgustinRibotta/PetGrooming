@@ -1,4 +1,4 @@
-package com.api.hairdressin.dto;
+package com.api.backend.dto;
 
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;

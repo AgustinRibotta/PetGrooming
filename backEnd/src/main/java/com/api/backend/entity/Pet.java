@@ -1,4 +1,4 @@
-package com.api.hairdressin.entity;
+package com.api.backend.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

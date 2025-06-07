@@ -1,9 +1,9 @@
-package com.api.hairdressin.service;
+package com.api.backend.service;
 
 import java.util.List;
 
-import com.api.hairdressin.dto.OwnerDTO;
-import com.api.hairdressin.dto.OwnerDetailDTO;
+import com.api.backend.dto.OwnerDTO;
+import com.api.backend.dto.OwnerDetailDTO;
 
 
 public interface OwnerService {

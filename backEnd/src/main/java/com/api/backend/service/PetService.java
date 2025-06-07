@@ -1,8 +1,8 @@
-package com.api.hairdressin.service;
+package com.api.backend.service;
 
 import java.util.List;
 
-import com.api.hairdressin.dto.PetDTO;
+import com.api.backend.dto.PetDTO;
 
 public interface PetService {
     

@@ -1,4 +1,4 @@
-package com.api.hairdressin.controllers;
+package com.api.backend.controllers;
 
 import java.net.URI;
 import java.util.HashMap;
@@ -17,9 +17,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.api.hairdressin.dto.OwnerDTO;
-import com.api.hairdressin.dto.OwnerDetailDTO;
-import com.api.hairdressin.service.OwnerService;
+import com.api.backend.dto.OwnerDTO;
+import com.api.backend.dto.OwnerDetailDTO;
+import com.api.backend.service.OwnerService;
 
 import jakarta.validation.Valid;
 

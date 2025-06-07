@@ -1,19 +1,18 @@
-package com.api.hairdressin.service.imp;
+package com.api.backend.service.imp;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.api.hairdressin.dto.OwnerDTO;
-import com.api.hairdressin.dto.OwnerDetailDTO;
-import com.api.hairdressin.dto.PetDTO;
-import com.api.hairdressin.entity.Owner;
-import com.api.hairdressin.repository.OwnerRepository;
-import com.api.hairdressin.service.OwnerService;
+import com.api.backend.dto.OwnerDTO;
+import com.api.backend.dto.OwnerDetailDTO;
+import com.api.backend.dto.PetDTO;
+import com.api.backend.entity.Owner;
+import com.api.backend.repository.OwnerRepository;
+import com.api.backend.service.OwnerService;
 
 @Service
 public class OwnerServiceImp implements OwnerService {

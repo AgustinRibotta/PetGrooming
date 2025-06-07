@@ -1,4 +1,4 @@
-package com.api.hairdressin.service.imp;
+package com.api.backend.service.imp;
 
 import java.util.List;
 import java.util.Optional;
@@ -9,12 +9,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.api.hairdressin.dto.PetDTO;
-import com.api.hairdressin.entity.Owner;
-import com.api.hairdressin.entity.Pet;
-import com.api.hairdressin.repository.OwnerRepository;
-import com.api.hairdressin.repository.PetRepository;
-import com.api.hairdressin.service.PetService;
+import com.api.backend.dto.PetDTO;
+import com.api.backend.entity.Owner;
+import com.api.backend.entity.Pet;
+import com.api.backend.repository.OwnerRepository;
+import com.api.backend.repository.PetRepository;
+import com.api.backend.service.PetService;
 
 
 @Service
