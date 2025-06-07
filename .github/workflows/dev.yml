@@ -6,7 +6,7 @@ on:
     branches:
       - main
     paths-ignore:
-      - 'kubernetes/backEnd-deployment.yaml'
+      - 'kubernetes/backend-deployment.yaml'
       - 'kubernetes/frontend-deployment.yaml'
 
 jobs:
