@@ -40,8 +40,6 @@ jobs:
 
       - name: Build Java application using Maven
         run: |
-          pwd
-          ls -a 
           cd backend
           mvn clean install -DskipTests
 
