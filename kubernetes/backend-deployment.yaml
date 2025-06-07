@@ -21,7 +21,7 @@ spec:
             - containerPort: 8081
           env:                           
             - name: DB_URL
-              value: jdbc:mysql://mysql.petapp-main.svc.cluster.local:3306/hairdressindb
+              value: jdbc:mysql://mysql.petapp-main.svc.cluster.local:3306/hairdressin
             - name: DB_USERNAME
               valueFrom:
                 secretKeyRef:
@@ -33,9 +33,9 @@ spec:
                   name: mysql-secret
                   key: DB_PASSWORD
             - name: SERVER_PORT
-              value: "8080"
+              value: "8081"
             - name: SPRING_PROFILES_ACTIVE
-              value: "default"
+              value: dev
 
 
 
