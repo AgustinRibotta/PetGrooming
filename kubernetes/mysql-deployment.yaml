@@ -26,12 +26,12 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: mysql-secret
-                  key: username
+                  key: MYSQL_USER
             - name: MYSQL_ROOT_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: mysql-secret
-                  key: password
+                  key:  MYSQL_ROOT_PASSWORD
             - name: MYSQL_DATABASE
               value: hairdressindb   
           ports:
