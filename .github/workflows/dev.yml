@@ -72,11 +72,7 @@ jobs:
 
       - name: Install dependencies and build
         run: |
-          pwd
-          ls -la
           cd frontend
-          pwd
-          ls -la
           npm install
           npm run build
 
@@ -113,7 +109,7 @@ jobs:
           git config --global user.name "GitHub Actions"
           git remote set-url origin git@github.com:AgustinRibotta/PetGrooming.git
 
-          git add kubernetes/backEnd-deployment.yaml
+          git add kubernetes/backend-deployment.yaml
           git add kubernetes/frontend-deployment.yaml
 
           if git diff --cached --quiet; then
