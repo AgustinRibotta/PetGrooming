@@ -4,89 +4,117 @@ on:
   workflow_dispatch: 
   push:
     branches:
-      - dev
+      - main
     paths-ignore:
-      - 'backend/hairdressin/kubernetes/deployment.yaml'
-
+      - 'backEnd/kubernetes/backEnd-deployment.yaml'
+      - 'frontEnd/kubernetes/frontend-deployment.yaml'
 
 jobs:
-  update-image-version:
-    runs-on: ubuntu-latest
-    if: github.actor != 'github-actions[bot]'
 
+  generate-version:
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.generate.outputs.VERSION }}
     steps:
-      # Step 1: Checkout the repository
+      - name: Generate version using timestamp
+        id: generate
+        run: |
+          VERSION=$(date +'%Y%m%d%H%M%S')
+          echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
+
+  backend:
+    runs-on: ubuntu-latest
+    needs: generate-version
+    env:
+      VERSION: ${{ needs.generate-version.outputs.version }}
+    steps:
       - name: Checkout Repository
         uses: actions/checkout@v3
 
-      # Step 2: Check if the last commit was made by GitHub Actions
-      - name: Check Last Commit Author
+      - name: Set environment variables from secrets
         run: |
-          LAST_COMMIT_AUTHOR=$(git log -1 --pretty=format:'%an')
-          if [ "$LAST_COMMIT_AUTHOR" = "GitHub Actions" ]; then
-            echo "The last commit was made by GitHub Actions. No further commit will be made."
-            exit 0
-          fi
+          echo "DB_USERNAME=${{ secrets.DB_USERNAME }}"
+          echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}"
+          echo "DB_URL=${{ secrets.DB_URL }}"
+          echo "SERVER_PORT=${{ secrets.SERVER_PORT }}"
 
-      # Step 3: Set up SSH key for Git authentication
-      - name: Set up SSH key
+      - name: Build Java application using Maven
+        run: |
+          cd backEnd
+          mvn clean install -DskipTests
+
+      - name: Authenticate with Docker Hub
+        run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+
+      - name: Build and Push Docker Image
+        run: |
+          cd backEnd
+          docker build -t agustinribotta/hairdresin-app:$VERSION .
+          docker push agustinribotta/hairdresin-app:$VERSION
+
+      - name: Update backend deployment YAML
+        run: |
+          sed -i "s|agustinribotta/hairdresin-app:.*|agustinribotta/hairdresin-app:$VERSION|" backEnd/hairdressin/kubernetes/backEnd-deployment.yaml
+
+  frontend:
+    runs-on: ubuntu-latest
+    needs: generate-version
+    env:
+      VERSION: ${{ needs.generate-version.outputs.version }}
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: Install dependencies and build
+        run: |
+          cd frontEnd
+          npm install
+          npm run build
+
+      - name: Authenticate with Docker Hub
+        run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+
+      - name: Build and Push Docker Image
+        run: |
+          cd frontEnd
+          docker build -t agustinribotta/hairdresin-frontend:$VERSION .
+          docker push agustinribotta/hairdresin-frontend:$VERSION
+
+      - name: Update frontend deployment YAML
+        run: |
+          sed -i "s|agustinribotta/hairdresin-frontend:.*|agustinribotta/hairdresin-frontend:$VERSION|" frontEnd/kubernetes/frontend-deployment.yaml
+
+  push-yamls:
+    runs-on: ubuntu-latest
+    needs: [backend, frontend]
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Set up SSH for Git push
         run: |
           mkdir -p ~/.ssh
           echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_ed25519
           chmod 600 ~/.ssh/id_ed25519
           ssh-keyscan github.com >> ~/.ssh/known_hosts
 
-      # Step 4: Generate a unique version using the current timestamp
-      - name: Generate version using timestamp
-        id: generate_version
-        run: |
-          VERSION=$(date +'%Y%m%d%H%M%S') 
-          echo "Generated version: $VERSION"
-          echo "VERSION=$VERSION" >> $GITHUB_ENV  
-
-      # Step 5: Compile the Java application (Maven)
-      - name: Build Java application using Maven
-        run: |
-          mvn clean install 
-
-      # Step 6: Verify the VERSION variable is correctly passed
-      - name: Verify VERSION variable
-        run: echo "The generated version is:$VERSION"
-        
-      # Step 7: Authenticate with Docker Hub
-      - name: Authenticate with Docker Hub
-        run: |
-          echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
-
-      # Step 8: Build and push the Docker image
-      - name: Build and Push Docker Image
-        run: |
-          docker build -t agustinribotta/hairdresin-app:$VERSION .
-          docker push agustinribotta/hairdresin-app:$VERSION
-
-      # Step 9: Update the Kubernetes deployment file with the new image version
-      - name: Update Docker Image Version in Deployment YAML
-        run: |
-          VERSION=${{ env.VERSION }}
-          sed -i "s|agustinribotta/hairdresin-app:.*|agustinribotta/hairdresin-app:$VERSION|" backend/hairdressin/kubernetes/deployment.yaml
-          echo "" >> backend/hairdressin/kubernetes/deployment.yaml 
-
-      # Step 10: Check if there are changes
-      - name: Check if there are changes
-        run: git status
-
-      # Step 11: Commit the changes and push to the repository
-      - name: Commit and Push Changes
+      - name: Commit and Push updated YAMLs
         run: |
           git config --global user.email "github-actions@github.com"
           git config --global user.name "GitHub Actions"
-          git remote set-url origin https://github.com/AgustinRibotta/PetGrooming
+          git remote set-url origin git@github.com:AgustinRibotta/PetGrooming.git
 
-          # Check if there are changes to commit
-          if git diff --quiet backend/hairdressin/kubernetes/deployment.yaml; then
-            echo "No changes to commit"
+          git add backEnd/hairdressin/kubernetes/backEnd-deployment.yaml
+          git add frontEnd/kubernetes/frontend-deployment.yaml
+
+          if git diff --cached --quiet; then
+            echo "No deployment YAML changes to commit."
           else
-            git add backend/hairdressin/kubernetes/deployment.yaml
-            git commit -m "Update image to version $VERSION"
-            git push origin main 
+            git commit -m "Update backend and frontend image versions"
+            git push origin main
           fi

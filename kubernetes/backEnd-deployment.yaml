@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: springboot-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: springboot-app
+  template: 
+    metadata:
+      labels:
+        app: springboot-app
+    spec:
+      containers:
+        - name: springboot-app
+          image: agustinribotta/hairdresin-app:20250407185855
+          imagePullPolicy: Always 
+          ports:
+            - containerPort: 8080
+
+
+
+
+
+
+
+

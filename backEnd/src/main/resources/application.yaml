@@ -1,0 +1,6 @@
+spring:
+  application:
+    name: hairdressin  
+  
+  profiles:
+    active: ${SPRING_PROFILES_ACTIVE}
