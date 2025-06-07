@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: springboot-app
-          image: agustinribotta/hairdresin-app:20250407185855
+          image: agustinribotta/hairdresin-app:20250607222159
 
           imagePullPolicy: Always 
           ports:
