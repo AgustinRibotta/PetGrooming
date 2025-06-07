@@ -1,22 +1,28 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Navbar from "./components/Navbar";
+import Footer from "./components/Footer";
+
 import Home from "./pages/Home";
 import Owners from "./pages/Owners";
-// import Pets from "./pages/Pets";
-import './index.css';
+import OwnerDetail from "./pages/OwnerDetail";
+import Pets from "./pages/Pets";
+// import AddNew from "./pages/AddNew";  
 
 function App() {
   return (
     <Router>
       <div className="min-h-screen flex flex-col">
         <Navbar />
-        <main className="flex-grow p-4">
+        <main className="flex-grow p-4 bg-gray-100">
           <Routes>
-            <Route path="/" element={<Home />} />
+            <Route path="/" element={<Home />} /> 
             <Route path="/owners" element={<Owners />} />
-            {/* <Route path="/pets" element={<Pets />} /> */}
+            <Route path="/pets" element={<Pets />} />
+            <Route path="/owners/:id" element={<OwnerDetail />} />
+            {/* <Route path="/add-new" element={<AddNew />} /> */}
           </Routes>
         </main>
+        <Footer />
       </div>
     </Router>
   );
