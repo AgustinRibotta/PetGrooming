@@ -75,6 +75,7 @@ jobs:
             echo "No backend deployment YAML changes to commit."
           else
             git commit -m "Update backend image version to $VERSION"
+            git pull --rebase origin main
             git push origin main
           fi
 
@@ -130,5 +131,6 @@ jobs:
             echo "No frontend deployment YAML changes to commit."
           else
             git commit -m "Update frontend image version to $VERSION"
+            git pull --rebase origin main
             git push origin main
           fi
