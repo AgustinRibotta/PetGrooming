@@ -17,12 +17,24 @@ spec:
           image: agustinribotta/hairdresin-app:20250407185855
           imagePullPolicy: Always 
           ports:
-            - containerPort: 8080
-
-
-
-
-
+            - containerPort: 8081
+          env:                           
+            - name: DB_URL
+              value: jdbc:mysql://mysql.petapp-main.svc.cluster.local:3306/hairdressindb
+            - name: DB_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: mysql-secret
+                  key: username
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mysql-secret
+                  key: password
+            - name: SERVER_PORT
+              value: "8080"
+            - name: SPRING_PROFILES_ACTIVE
+              value: "default"
 
 
 
