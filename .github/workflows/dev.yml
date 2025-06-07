@@ -56,6 +56,9 @@ jobs:
         run: |
           sed -i "s|agustinribotta/hairdresin-app:.*|agustinribotta/hairdresin-app:$VERSION|" kubernetes/backend-deployment.yaml
 
+      - name: Show backend deployment YAML content
+        run: cat kubernetes/backend-deployment.yaml
+
   frontend:
     runs-on: ubuntu-latest
     needs: generate-version
@@ -88,7 +91,9 @@ jobs:
       - name: Update frontend deployment YAML
         run: |
           sed -i "s|agustinribotta/hairdresin-frontend:.*|agustinribotta/hairdresin-frontend:$VERSION|" kubernetes/frontend-deployment.yaml
-
+      - name: Show frontend deployment YAML content
+        run: cat kubernetes/frontend-deployment.yaml
+        
   push-yamls:
     runs-on: ubuntu-latest
     needs: [backend, frontend]
