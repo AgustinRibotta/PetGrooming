@@ -6,60 +6,45 @@ on:
     branches:
       - main
     paths-ignore:
-      - 'backEnd/hairdressin/kubernetes/app-deployment.yaml'
+      - 'backEnd/kubernetes/backEnd-deployment.yaml'
+      - 'frontEnd/kubernetes/frontend-deployment.yaml'
 
 jobs:
-  build:
+
+  generate-version:
     runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.generate.outputs.VERSION }}
     steps:
-      - name: Set environment variables from secrets
-        env:
-          DB_USERNAME: ${{ secrets.DB_USERNAME }}
-          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
-          DB_URL: ${{ secrets.DB_URL }}
-          SERVER_PORT: ${{ secrets.SERVER_PORT }}
+      - name: Generate version using timestamp
+        id: generate
         run: |
-          echo "DB_USERNAME: $DB_USERNAME"
-          echo "DB_PASSWORD: $DB_PASSWORD"
-          echo "DB_URL: $DB_URL"
-          echo "SERVER_PORT: $SERVER_PORT"
-    
+          VERSION=$(date +'%Y%m%d%H%M%S')
+          echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
+
+  backend:
+    runs-on: ubuntu-latest
+    needs: generate-version
+    env:
+      VERSION: ${{ needs.generate-version.outputs.version }}
+    steps:
       - name: Checkout Repository
         uses: actions/checkout@v3
 
-      - name: Check Last Commit Author
+      - name: Set environment variables from secrets
         run: |
-          LAST_COMMIT_AUTHOR=$(git log -1 --pretty=format:'%an')
-          if [ "$LAST_COMMIT_AUTHOR" = "GitHub Actions" ]; then
-            echo "The last commit was made by GitHub Actions. No further commit will be made."
-            exit 0
-          fi
-
-      - name: Set up SSH key
-        run: |
-          mkdir -p ~/.ssh
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_ed25519
-          chmod 600 ~/.ssh/id_ed25519
-          ssh-keyscan github.com >> ~/.ssh/known_hosts
-
-      - name: Generate version using timestamp
-        id: generate_version
-        run: |
-          VERSION=$(date +'%Y%m%d%H%M%S') 
-          echo "Generated version: $VERSION"
-          echo "VERSION=$VERSION" >> $GITHUB_ENV  
+          echo "DB_USERNAME=${{ secrets.DB_USERNAME }}"
+          echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}"
+          echo "DB_URL=${{ secrets.DB_URL }}"
+          echo "SERVER_PORT=${{ secrets.SERVER_PORT }}"
 
       - name: Build Java application using Maven
         run: |
           cd backEnd
           mvn clean install -DskipTests
 
-      - name: Verify VERSION variable
-        run: echo "The generated version is:$VERSION"
-        
       - name: Authenticate with Docker Hub
-        run: |
-          echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+        run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
 
       - name: Build and Push Docker Image
         run: |
@@ -67,26 +52,69 @@ jobs:
           docker build -t agustinribotta/hairdresin-app:$VERSION .
           docker push agustinribotta/hairdresin-app:$VERSION
 
-      - name: Update Docker Image Version in Deployment YAML
+      - name: Update backend deployment YAML
         run: |
-          cd backEnd/hairdressin/kubernetes
-          VERSION=${{ env.VERSION }}
-          sed -i "s|agustinribotta/hairdresin-app:.*|agustinribotta/hairdresin-app:$VERSION|" app-deployment.yaml
-          echo "" >> app-deployment.yaml  # Si necesitas hacer algo con este archivo también
+          sed -i "s|agustinribotta/hairdresin-app:.*|agustinribotta/hairdresin-app:$VERSION|" backEnd/hairdressin/kubernetes/backEnd-deployment.yaml
 
-      - name: Check if there are changes
-        run: git status
+  frontend:
+    runs-on: ubuntu-latest
+    needs: generate-version
+    env:
+      VERSION: ${{ needs.generate-version.outputs.version }}
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
 
-      - name: Commit and Push Changes
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: Install dependencies and build
+        run: |
+          cd frontEnd
+          npm install
+          npm run build
+
+      - name: Authenticate with Docker Hub
+        run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+
+      - name: Build and Push Docker Image
+        run: |
+          cd frontEnd
+          docker build -t agustinribotta/hairdresin-frontend:$VERSION .
+          docker push agustinribotta/hairdresin-frontend:$VERSION
+
+      - name: Update frontend deployment YAML
+        run: |
+          sed -i "s|agustinribotta/hairdresin-frontend:.*|agustinribotta/hairdresin-frontend:$VERSION|" frontEnd/kubernetes/frontend-deployment.yaml
+
+  push-yamls:
+    runs-on: ubuntu-latest
+    needs: [backend, frontend]
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Set up SSH for Git push
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          ssh-keyscan github.com >> ~/.ssh/known_hosts
+
+      - name: Commit and Push updated YAMLs
         run: |
           git config --global user.email "github-actions@github.com"
           git config --global user.name "GitHub Actions"
           git remote set-url origin git@github.com:AgustinRibotta/PetGrooming.git
 
-          if git diff --quiet backEnd/hairdressin/kubernetes/app-deployment.yaml; then
-            echo "No changes to commit"
+          git add backEnd/hairdressin/kubernetes/backEnd-deployment.yaml
+          git add frontEnd/kubernetes/frontend-deployment.yaml
+
+          if git diff --cached --quiet; then
+            echo "No deployment YAML changes to commit."
           else
-            git add backEnd/hairdressin/kubernetes/app-deployment.yaml
-            git commit -m "Update image to version $VERSION"
-            git push origin dev
+            git commit -m "Update backend and frontend image versions"
+            git push origin main
           fi
