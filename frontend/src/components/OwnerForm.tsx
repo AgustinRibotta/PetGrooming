@@ -1,5 +1,3 @@
-import React from "react";
-
 type Props = {
   ownerName: string;
   setOwnerName: (name: string) => void;

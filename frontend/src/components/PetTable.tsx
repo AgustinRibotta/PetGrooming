@@ -1,18 +1,17 @@
-import React from "react";
-import { useNavigate } from "react-router-dom"; 
+import { useNavigate } from "react-router-dom";
 
 type Pet = {
-  id: number;
+  id?: number;
   name: string;
   race: string;
-  ownerId: number;
+  ownerId?: number;
 };
 
 type PetTableProps = {
   pets: Pet[];
   ownersMap: Record<number, string>;
   onViewOwner: (ownerId: number) => void;
-  onDeletePet: (petId: number) => void; 
+  onDeletePet: (petId: number) => void;
 };
 
 export default function PetTable({ pets, ownersMap, onViewOwner, onDeletePet }: PetTableProps) {
@@ -35,27 +34,35 @@ export default function PetTable({ pets, ownersMap, onViewOwner, onDeletePet }: 
               <td className="border border-gray-300 px-4 py-2">{pet.name}</td>
               <td className="border border-gray-300 px-4 py-2">{pet.race}</td>
               <td className="border border-gray-300 px-4 py-2">
-                {ownersMap[pet.ownerId] || "Loading..."}
+                {pet.ownerId !== undefined ? ownersMap[pet.ownerId] || "Loading..." : "Owner info missing"}
               </td>
               <td className="border border-gray-300 px-4 py-2 space-x-2">
-                <button
-                  onClick={() => onViewOwner(pet.ownerId)}
-                  className="bg-indigo-500 hover:bg-indigo-600 text-white px-3 py-1 rounded"
-                >
-                  View
-                </button>
-                <button
-                  onClick={() => navigate(`/edit-client/${pet.ownerId}`)}
-                  className="bg-yellow-500 hover:bg-yellow-600 text-white px-3 py-1 rounded"
-                >
-                  Edit
-                </button>
+                {pet.ownerId !== undefined ? (
+                  <>
+                    <button
+                      onClick={() => onViewOwner(pet.ownerId!)}
+                      className="bg-indigo-500 hover:bg-indigo-600 text-white px-3 py-1 rounded"
+                    >
+                      View
+                    </button>
+                    <button
+                      onClick={() => navigate(`/edit-client/${pet.ownerId}`)}
+                      className="bg-yellow-500 hover:bg-yellow-600 text-white px-3 py-1 rounded"
+                    >
+                      Edit
+                    </button>
+                  </>
+                ) : (
+                  <span className="text-gray-500 italic">Owner info missing</span>
+                )}
                 <button
                   onClick={() => {
-                    if (window.confirm("Are you sure you want to delete this pet?")) {
-                      onDeletePet(pet.id);
-                    }
-                  }}
+                        if (pet.id !== undefined) {
+                          onDeletePet(pet.id);
+                        } else {
+                          console.error("Pet id is undefined");
+                        }
+                      }}
                   className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded"
                 >
                   Delete

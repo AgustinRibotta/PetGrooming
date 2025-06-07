@@ -1,5 +1,5 @@
 import axiosClient from "./axiosClients";
-import { type OwnerDTO } from "../types/Owner";
+import type { OwnerDTO } from "../types/Owner";
 
 export const getAllOwners = () => axiosClient.get<OwnerDTO[]>("/owners");
 export const getOwnerById = (id: number) => axiosClient.get(`/owners/${id}`);

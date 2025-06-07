@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { getOwnerById } from "../api/ownerApi";
 import { getAllPets, deletePet } from "../api/petApi"; 
@@ -8,7 +8,7 @@ import PetListTable from "../components/PetListTable";
 
 export default function OwnerDetail() {
   const { id } = useParams();
-  const navigate = useNavigate(); // ✅ Hook ubicado correctamente
+  const navigate = useNavigate(); 
   const [owner, setOwner] = useState<OwnerDTO | null>(null);
   const [pets, setPets] = useState<PetDTO[]>([]);
   const [loading, setLoading] = useState(true);

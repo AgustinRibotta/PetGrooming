@@ -4,23 +4,13 @@ import { createPet } from "../api/petApi";
 import OwnerForm from "../components/OwnerForm";
 import PetFormItem from "../components/PetFormItem";
 import { useNavigate } from "react-router-dom";
+import type { PetDTO } from "../types/Pet";
 
-
-type PetForm = {
-  name: string;
-  race: string;
-  color: string;
-  allergic: boolean;
-  specialAttention: boolean;
-  observations: string;
-};
 
 export default function AddNewClient() {
   const [ownerName, setOwnerName] = useState("");
   const [ownerPhone, setOwnerPhone] = useState("");
-  const navigate = useNavigate();
-
-  const [pets, setPets] = useState<PetForm[]>([
+  const [pets, setPets] = useState<PetDTO[]>([
     {
       name: "",
       race: "",
@@ -32,19 +22,27 @@ export default function AddNewClient() {
   ]);
   const [error, setError] = useState<string | null>(null);
 
-  const handlePetChange = (
+  const navigate = useNavigate();
+
+  
+  function handlePetChange<K extends keyof PetDTO>(
     index: number,
-    field: keyof PetForm,
-    value: string | boolean
-  ) => {
-    const updatedPets = [...pets];
-    updatedPets[index][field] = value;
-    setPets(updatedPets);
-  };
+    field: K,
+    value: PetDTO[K]
+  ) {
+    setPets((prevPets) => {
+      const updatedPets = [...prevPets];
+      updatedPets[index] = {
+        ...updatedPets[index],
+        [field]: value,
+      };
+      return updatedPets;
+    });
+  }
 
   const addPet = () => {
-    setPets([
-      ...pets,
+    setPets((prevPets) => [
+      ...prevPets,
       {
         name: "",
         race: "",
@@ -57,12 +55,15 @@ export default function AddNewClient() {
   };
 
   const removePet = (index: number) => {
-    if (pets.length === 1) return;
-    setPets(pets.filter((_, i) => i !== index));
+    setPets((prevPets) => {
+      if (prevPets.length === 1) return prevPets; 
+      return prevPets.filter((_, i) => i !== index);
+    });
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
     if (!ownerName.trim()) {
       setError("Owner name is required");
       return;
@@ -87,15 +88,14 @@ export default function AddNewClient() {
       for (const pet of pets) {
         await createPet({
           ...pet,
-          allergic: pet.allergic ? "true" : "false",
-          specialAttention: pet.specialAttention ? "true" : "false",
+          allergic: pet.allergic ,
+          specialAttention: pet.specialAttention ,
           ownerId,
         });
       }
 
       alert("Client and pets saved successfully!");
       navigate(`/owners/${ownerId}`);
-
 
       setOwnerName("");
       setOwnerPhone("");

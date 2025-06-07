@@ -1,7 +1,7 @@
 FROM openjdk:17
 
 # Set the working directory
-WORKDIR /hairdressin
+WORKDIR /
 
 # Copy the jar file into the container
 COPY target/*.jar hairdressin.jar

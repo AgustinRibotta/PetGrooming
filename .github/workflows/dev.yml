@@ -51,7 +51,7 @@ jobs:
 
       - name: Build Java application using Maven
         run: |
-          cd backEnd/hairdressin
+          cd backEnd
           mvn clean install -DskipTests
 
       - name: Verify VERSION variable
@@ -63,7 +63,7 @@ jobs:
 
       - name: Build and Push Docker Image
         run: |
-          cd backEnd/hairdressin
+          cd backEnd
           docker build -t agustinribotta/hairdresin-app:$VERSION .
           docker push agustinribotta/hairdresin-app:$VERSION
 

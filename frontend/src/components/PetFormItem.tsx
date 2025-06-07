@@ -1,18 +1,9 @@
-import React from "react";
-
-type PetForm = {
-  name: string;
-  race: string;
-  color: string;
-  allergic: boolean;
-  specialAttention: boolean;
-  observations: string;
-};
+import type { PetDTO } from "../types/Pet";
 
 type Props = {
-  pet: PetForm;
+  pet: PetDTO;
   index: number;
-  onChange: (index: number, field: keyof PetForm, value: string | boolean) => void;
+  onChange: (index: number, field: keyof PetDTO, value: string | boolean) => void;
   onRemove: () => void;
   canRemove: boolean;
 };

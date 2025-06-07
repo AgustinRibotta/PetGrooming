@@ -4,14 +4,14 @@ import { getOwnerById, updateOwner } from "../api/ownerApi";
 import { getAllPets, updatePet, createPet } from "../api/petApi"; // Omitimos deletePet
 import OwnerForm from "../components/OwnerForm";
 import PetFormItem from "../components/PetFormItem";
-import type { PetForm } from "../types/Pet";
+import type { PetDTO } from "../types/Pet";
 
 export default function EditClient() {
   const { id } = useParams();
   const navigate = useNavigate();
   const [ownerName, setOwnerName] = useState("");
   const [ownerPhone, setOwnerPhone] = useState("");
-  const [pets, setPets] = useState<(PetForm & { id?: number })[]>([]);
+  const [pets, setPets] = useState<(PetDTO & { id?: number })[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -40,7 +40,7 @@ export default function EditClient() {
 
   const handlePetChange = (
     index: number,
-    field: keyof PetForm,
+    field: keyof PetDTO,
     value: string | boolean
   ) => {
     setPets((prev) => {
@@ -98,8 +98,8 @@ export default function EditClient() {
       for (const pet of pets) {
         const petData = {
           ...pet,
-          allergic: pet.allergic ? "true" : "false",
-          specialAttention: pet.specialAttention ? "true" : "false",
+          allergic: !!pet.allergic,          
+          specialAttention: !!pet.specialAttention,
           ownerId,
         };
 

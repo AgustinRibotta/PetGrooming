@@ -10,11 +10,11 @@ spec:
   project: default
   source:
     repoURL: https://github.com/AgustinRibotta/PetGrooming
-    targetRevision: dev
+    targetRevision: main
     path: kubernetes
   destination:
     server: https://kubernetes.default.svc
-    namespace: petapp-dev
+    namespace: petapp-main
   syncPolicy:
     automated:
       prune: true

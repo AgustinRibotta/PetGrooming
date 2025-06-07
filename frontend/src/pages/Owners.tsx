@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { getAllOwners, deleteOwner } from "../api/ownerApi"; 
 import OwnerTable from "../components/OwnerTable";

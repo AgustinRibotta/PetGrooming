@@ -1,4 +1,3 @@
-import React from "react";
 import type { PetDTO } from "../types/Pet";
 
 type PetListTableProps = {
@@ -35,7 +34,7 @@ export default function PetListTable({ pets, onDelete }: PetListTableProps) {
             <td className="border border-gray-300 px-4 py-2">{pet.observations}</td>
             <td className="border border-gray-300 px-4 py-2">
               <button
-                onClick={() => onDelete(pet.id)}
+                onClick={() => pet.id !== undefined && onDelete(pet.id)}
                 className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded"
               >
                 Delete
