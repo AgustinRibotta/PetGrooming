@@ -103,6 +103,9 @@ jobs:
           chmod 600 ~/.ssh/id_ed25519
           ssh-keyscan github.com >> ~/.ssh/known_hosts
 
+      - name: List files in kubernetes folder
+        run: ls -l kubernetes/
+
       - name: Commit and Push updated YAMLs
         run: |
           git config --global user.email "github-actions@github.com"
