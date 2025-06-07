@@ -111,7 +111,16 @@ jobs:
 
       - name: Show unstaged changes
         run: git diff
-              
+        
+      - name: Show backend deployment YAML content
+        run: cat kubernetes/backend-deployment.yaml
+
+      - name: Show frontend deployment YAML content
+        run: cat kubernetes/frontend-deployment.yaml
+
+      - name: List kubernetes directory files
+        run: ls -l kubernetes
+
       - name: Commit and Push updated YAMLs
         run: |
           git config --global user.email "github-actions@github.com"
