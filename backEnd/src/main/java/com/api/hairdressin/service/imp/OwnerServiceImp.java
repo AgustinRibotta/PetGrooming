@@ -69,30 +69,36 @@ public class OwnerServiceImp implements OwnerService {
 
     @Override
     public OwnerDTO save(OwnerDTO ownerDTO) {
+        Owner owner;
 
-        Owner owner = new Owner();
-        owner.setId(ownerDTO.getId());
-        owner.setName(ownerDTO.getName());
-        owner.setPhoneNumber(ownerDTO.getPhoneNumber());
-        
-        if (ownerRepository.existsByPhoneNumberAndName(ownerDTO.getPhoneNumber(),ownerDTO.getName())) {
-            throw new RuntimeException("Owner with the same name and phone number exist");
+        if (ownerDTO.getId() == null) {
+            owner = new Owner();
+        } else {
+            owner = ownerRepository.findById(ownerDTO.getId())
+                .orElseThrow(() -> new RuntimeException("Owner not found"));
         }
 
-        Owner saveOwner = ownerRepository.save(owner);
+        owner.setName(ownerDTO.getName());
+        owner.setPhoneNumber(ownerDTO.getPhoneNumber());
+
+        Owner savedOwner = ownerRepository.save(owner);
 
         return new OwnerDTO(
-            saveOwner.getId(), 
-            saveOwner.getName(), 
-            saveOwner.getPhoneNumber(), 
-            saveOwner.getPets() != null ? saveOwner.getPets().size() : 0);
-
-        
+            savedOwner.getId(),
+            savedOwner.getName(),
+            savedOwner.getPhoneNumber(),
+            savedOwner.getPets() != null ? savedOwner.getPets().size() : 0
+        );
     }
 
     @Override
     public void deleteById(Long id) {
         ownerRepository.deleteById(id);
+    }
+
+    @Override
+    public Boolean existsByPhoneNumberAndName(String phoneNumber, String name) {
+        return ownerRepository.existsByPhoneNumberAndName(phoneNumber, name);
     }
 
 

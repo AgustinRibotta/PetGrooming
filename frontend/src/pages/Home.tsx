@@ -10,6 +10,13 @@ export default function Home() {
       </p>
 
       <div className="flex space-x-4">
+                <Link
+          to="/add-new"
+          className="px-6 py-3 bg-green-600 text-white rounded hover:bg-green-700 transition"
+        >
+          Add New Client
+        </Link>
+
         <Link
           to="/pets"
           className="px-6 py-3 bg-indigo-600 text-white rounded hover:bg-indigo-700 transition"
@@ -18,11 +25,12 @@ export default function Home() {
         </Link>
 
         <Link
-          to="/add-new"
-          className="px-6 py-3 bg-green-600 text-white rounded hover:bg-green-700 transition"
+          to="/owners"
+          className="px-6 py-3 bg-indigo-600 text-white rounded hover:bg-indigo-700 transition"
         >
-          Add New Appointment
+          View Owners
         </Link>
+
       </div>
     </div>
   );

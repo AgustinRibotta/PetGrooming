@@ -51,10 +51,14 @@ public class OwnerController {
     }
 
     @PostMapping()
-    private ResponseEntity<?> saveOwner (@Valid @RequestBody OwnerDTO onwer){
+    private ResponseEntity<?> saveOwner (@Valid @RequestBody OwnerDTO owner){
+        
+        if (ownerService.existsByPhoneNumberAndName(owner.getPhoneNumber(), owner.getName())) {
+            return ResponseEntity.badRequest().body("Owner with same name and phone number already exists");
+        }
 
-        OwnerDTO saveOwner = ownerService.save(onwer);
-        URI location = URI.create("/api/owner/" + saveOwner.getId());
+        OwnerDTO saveOwner = ownerService.save(owner);
+        URI location = URI.create("/api/owners/" + saveOwner.getId());
          
 
         return ResponseEntity.created(location).body(saveOwner);
@@ -62,7 +66,7 @@ public class OwnerController {
 
     
     @PutMapping("/{id}")
-    public ResponseEntity<?> putOwner(@Valid @PathVariable Long id, @RequestBody OwnerDTO owner) {
+    public ResponseEntity<?> putOwner( @PathVariable Long id, @RequestBody OwnerDTO owner) {
 
         if (!ownerService.existsById(id)){
             Map<String, String> errorResponse = new HashMap<>();

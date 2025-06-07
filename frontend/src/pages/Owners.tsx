@@ -40,6 +40,11 @@ export default function Owners() {
     }
   }
 
+  // Función para editar: navegar a la ruta de edición
+  const handleEdit = (id: number) => {
+    navigate(`/edit-client/${id}`);
+  };
+
   const filteredOwners = owners.filter(owner =>
     owner.name.toLowerCase().includes(nameFilter.toLowerCase())
   );
@@ -63,6 +68,7 @@ export default function Owners() {
         owners={filteredOwners}
         onView={(id) => navigate(`/owners/${id}`)}
         onDelete={handleDelete}
+        onEdit={handleEdit}
       />
     </div>
   );

@@ -69,22 +69,31 @@ public class PetServiceImp implements PetService {
 
     @Override
     public PetDTO save(PetDTO petDTO) {
+        Pet pet;
 
-        Owner owner = ownerRepository.findById(petDTO.getOwnerId())
-            .orElseThrow(() -> new RuntimeException("Owner not found with ID: " + petDTO.getOwnerId()));
-
-        if (petRepository.existsByNameAndOneOwnerId(petDTO.getName(), petDTO.getOwnerId())) {
-            throw new RuntimeException("Pet with the same name already exists for this owner.");
+        if (petDTO.getId() != null) {
+            // EDITAR: buscamos la mascota existente
+            pet = petRepository.findById(petDTO.getId())
+                    .orElseThrow(() -> new RuntimeException("Pet with id " + petDTO.getId() + " not found"));
+        } else {
+            // CREAR: mascota nueva
+            pet = new Pet();
         }
 
-        Pet pet = new Pet();
+        // Seteamos los campos comunes
         pet.setName(petDTO.getName());
         pet.setRace(petDTO.getRace());
         pet.setColor(petDTO.getColor());
         pet.setAllergic(petDTO.getAllergic());
         pet.setSpecial_attention(petDTO.getSpecialAttention());
         pet.setObservations(petDTO.getObservations());
-        pet.setOneOwner(owner);  
+
+        // Cargamos el dueño si es necesario
+        if (pet.getOneOwner() == null || !pet.getOneOwner().getId().equals(petDTO.getOwnerId())) {
+            Owner owner = ownerRepository.findById(petDTO.getOwnerId())
+                    .orElseThrow(() -> new RuntimeException("Owner with id " + petDTO.getOwnerId() + " not found"));
+            pet.setOneOwner(owner);
+        }
 
         Pet savedPet = petRepository.save(pet);
 
@@ -99,7 +108,6 @@ public class PetServiceImp implements PetService {
             savedPet.getOneOwner().getId()
         );
     }
-
 
     @Transactional
     @Override

@@ -1,14 +1,17 @@
 // components/OwnerTable.tsx
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import type { OwnerDTO } from "../types/Owner";
 
 type OwnerTableProps = {
   owners: OwnerDTO[];
   onView: (id: number) => void;
-  onDelete: (id: number) => void; // nueva prop
+  onDelete: (id: number) => void;
 };
 
 export default function OwnerTable({ owners, onView, onDelete }: OwnerTableProps) {
+  const navigate = useNavigate();
+
   return (
     <table className="min-w-full border-collapse border border-gray-300">
       <thead>
@@ -32,6 +35,12 @@ export default function OwnerTable({ owners, onView, onDelete }: OwnerTableProps
                   className="bg-indigo-500 hover:bg-indigo-600 text-white px-3 py-1 rounded"
                 >
                   View
+                </button>
+                <button
+                  onClick={() => navigate(`/edit-client/${owner.id}`)}
+                  className="bg-yellow-500 hover:bg-yellow-600 text-white px-3 py-1 rounded"
+                >
+                  Edit
                 </button>
                 <button
                   onClick={() => onDelete(owner.id)}

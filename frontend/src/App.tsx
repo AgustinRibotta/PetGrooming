@@ -6,7 +6,8 @@ import Home from "./pages/Home";
 import Owners from "./pages/Owners";
 import OwnerDetail from "./pages/OwnerDetail";
 import Pets from "./pages/Pets";
-// import AddNew from "./pages/AddNew";  
+import AddNewClient  from "./pages/AddNewClient";  
+import EditClient from "./pages/EditClient";
 
 function App() {
   return (
@@ -19,7 +20,8 @@ function App() {
             <Route path="/owners" element={<Owners />} />
             <Route path="/pets" element={<Pets />} />
             <Route path="/owners/:id" element={<OwnerDetail />} />
-            {/* <Route path="/add-new" element={<AddNew />} /> */}
+            <Route path="/add-new" element={<AddNewClient  />} />
+             <Route path="/edit-client/:id" element={<EditClient />} />
           </Routes>
         </main>
         <Footer />

@@ -79,7 +79,7 @@ export default function Pets() {
         pets={filteredPets}
         ownersMap={ownersMap}
         onViewOwner={(ownerId) => navigate(`/owners/${ownerId}`)}
-        onDeletePet={handleDeletePet} // <-- pasar la función aquí
+        onDeletePet={handleDeletePet}
       />
     </div>
   );

@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.api.hairdressin.dto.PetDTO;
+import com.api.hairdressin.service.OwnerService;
 import com.api.hairdressin.service.PetService;
 
 import jakarta.validation.Valid;
@@ -22,7 +23,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.PutMapping;
-
 
 
 @RestController
@@ -50,18 +50,16 @@ public class PetController {
         return ResponseEntity.ok(pet);
     };
 
-    @PostMapping()
-    private ResponseEntity<?> savedPet (@Valid @RequestBody PetDTO pet ){
-        
-        PetDTO savedPet = petService.save(pet);
-        
-        URI location = URI.create("/api/pets/" + savedPet.getId());
-        return ResponseEntity.created(location).body(savedPet);    
+    @PostMapping
+    public ResponseEntity<?> savedPet(@Valid @RequestBody PetDTO pet) {
 
-    };
+        PetDTO savedPet = petService.save(pet);
+        URI location = URI.create("/api/pets/" + savedPet.getId());
+        return ResponseEntity.created(location).body(savedPet);
+    }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> putPet(@Valid @PathVariable Long id, @RequestBody PetDTO pet) {
+    public ResponseEntity<?> putPet(@PathVariable Long id, @RequestBody PetDTO pet) {
 
         if (!petService.existsById(id)){
             Map<String, String> errorResponse = new HashMap<>();

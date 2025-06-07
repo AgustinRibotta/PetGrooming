@@ -6,5 +6,5 @@ import com.api.hairdressin.entity.Pet;
 
 public interface PetRepository extends CrudRepository< Pet , Long >{
 
-    Boolean existsByNameAndOneOwnerId(String name, Long oneOwnerid);
+
 }

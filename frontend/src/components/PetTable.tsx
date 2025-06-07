@@ -1,4 +1,5 @@
 import React from "react";
+import { useNavigate } from "react-router-dom"; 
 
 type Pet = {
   id: number;
@@ -15,6 +16,8 @@ type PetTableProps = {
 };
 
 export default function PetTable({ pets, ownersMap, onViewOwner, onDeletePet }: PetTableProps) {
+  const navigate = useNavigate();
+
   return (
     <table className="min-w-full border-collapse border border-gray-300">
       <thead>
@@ -40,6 +43,12 @@ export default function PetTable({ pets, ownersMap, onViewOwner, onDeletePet }: 
                   className="bg-indigo-500 hover:bg-indigo-600 text-white px-3 py-1 rounded"
                 >
                   View
+                </button>
+                <button
+                  onClick={() => navigate(`/edit-client/${pet.ownerId}`)}
+                  className="bg-yellow-500 hover:bg-yellow-600 text-white px-3 py-1 rounded"
+                >
+                  Edit
                 </button>
                 <button
                   onClick={() => {

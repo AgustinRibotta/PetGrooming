@@ -13,5 +13,6 @@ public interface OwnerService {
     Boolean existsById(Long id);
     OwnerDTO save(OwnerDTO owner);
     void deleteById (Long id);
+    Boolean existsByPhoneNumberAndName(String phoneNumber, String name);
     
 }
