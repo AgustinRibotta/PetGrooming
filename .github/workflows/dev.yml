@@ -1,4 +1,4 @@
-name: CI - Dev
+name: CI - Main
 
 on:
   workflow_dispatch:
@@ -6,8 +6,8 @@ on:
     branches:
       - main
     paths-ignore:
-      - 'backEnd/kubernetes/backEnd-deployment.yaml'
-      - 'frontEnd/kubernetes/frontend-deployment.yaml'
+      - 'kubernetes/backEnd-deployment.yaml'
+      - 'kubernetes/frontend-deployment.yaml'
 
 jobs:
 
@@ -54,7 +54,7 @@ jobs:
 
       - name: Update backend deployment YAML
         run: |
-          sed -i "s|agustinribotta/hairdresin-app:.*|agustinribotta/hairdresin-app:$VERSION|" backEnd/hairdressin/kubernetes/backEnd-deployment.yaml
+          sed -i "s|agustinribotta/hairdresin-app:.*|agustinribotta/hairdresin-app:$VERSION|" kubernetes/backEnd-deployment.yaml
 
   frontend:
     runs-on: ubuntu-latest
@@ -87,7 +87,7 @@ jobs:
 
       - name: Update frontend deployment YAML
         run: |
-          sed -i "s|agustinribotta/hairdresin-frontend:.*|agustinribotta/hairdresin-frontend:$VERSION|" frontEnd/kubernetes/frontend-deployment.yaml
+          sed -i "s|agustinribotta/hairdresin-frontend:.*|agustinribotta/hairdresin-frontend:$VERSION|" kubernetes/frontend-deployment.yaml
 
   push-yamls:
     runs-on: ubuntu-latest
@@ -109,8 +109,8 @@ jobs:
           git config --global user.name "GitHub Actions"
           git remote set-url origin git@github.com:AgustinRibotta/PetGrooming.git
 
-          git add backEnd/hairdressin/kubernetes/backEnd-deployment.yaml
-          git add frontEnd/kubernetes/frontend-deployment.yaml
+          git add kubernetes/backEnd-deployment.yaml
+          git add kubernetes/frontend-deployment.yaml
 
           if git diff --cached --quiet; then
             echo "No deployment YAML changes to commit."
