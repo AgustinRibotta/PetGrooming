@@ -1,4 +1,4 @@
-package com.api.hairdressin.controllers;
+package com.api.backend.controllers;
 
 import java.net.URI;
 import java.util.HashMap;
@@ -11,9 +11,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.api.hairdressin.dto.PetDTO;
-import com.api.hairdressin.service.OwnerService;
-import com.api.hairdressin.service.PetService;
+import com.api.backend.dto.PetDTO;
+import com.api.backend.service.PetService;
 
 import jakarta.validation.Valid;
 

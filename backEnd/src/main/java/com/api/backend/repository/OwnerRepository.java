@@ -1,8 +1,8 @@
-package com.api.hairdressin.repository;
+package com.api.backend.repository;
 
 import org.springframework.data.repository.CrudRepository;
 
-import com.api.hairdressin.entity.Owner;
+import com.api.backend.entity.Owner;
 
 public interface OwnerRepository extends CrudRepository < Owner, Long > {
 

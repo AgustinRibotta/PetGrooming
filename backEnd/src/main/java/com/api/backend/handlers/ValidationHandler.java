@@ -1,4 +1,4 @@
-package com.api.hairdressin.handlers;
+package com.api.backend.handlers;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

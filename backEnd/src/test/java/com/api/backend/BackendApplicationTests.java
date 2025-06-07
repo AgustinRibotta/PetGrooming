@@ -1,10 +1,10 @@
-package com.api.hairdressin;
+package com.api.backend;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class HairdressinApplicationTests {
+class BackendApplicationTests {
 
 	@Test
 	void contextLoads() {

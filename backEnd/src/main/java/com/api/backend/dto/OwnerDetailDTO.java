@@ -1,4 +1,6 @@
-package com.api.hairdressin.dto;
+package com.api.backend.dto;
+
+import java.util.List;
 
 import jakarta.validation.constraints.NotEmpty;
 import lombok.Getter;
@@ -8,7 +10,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class OwnerDTO {
+public class OwnerDetailDTO {
     
     private Long id;
 
@@ -17,14 +19,14 @@ public class OwnerDTO {
 
     @NotEmpty(message = "Phone number is mandatory")
     private String phoneNumber;
+    
+    private List<PetDTO> pets;
 
-    private int petCount;
-
-    public OwnerDTO(Long id, String name, String phoneNumber, int petCount) {
+    public OwnerDetailDTO(Long id, String name, String phoneNumber, List<PetDTO> pets) {
         this.id = id;
         this.name = name;
-        this.phoneNumber = phoneNumber; 
-        this.petCount = petCount;
+        this.phoneNumber = phoneNumber;
+        this.pets = pets;
     }
 
 }

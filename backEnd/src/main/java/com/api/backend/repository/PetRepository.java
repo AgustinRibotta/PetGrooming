@@ -1,8 +1,8 @@
-package com.api.hairdressin.repository;
+package com.api.backend.repository;
 
 import org.springframework.data.repository.CrudRepository;
 
-import com.api.hairdressin.entity.Pet;
+import com.api.backend.entity.Pet;
 
 public interface PetRepository extends CrudRepository< Pet , Long >{
 
