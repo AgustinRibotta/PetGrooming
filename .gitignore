@@ -57,3 +57,4 @@ build/
 ### Env ###
 .env
 mysql-secret.yaml
+spring-boot-secret.yaml
