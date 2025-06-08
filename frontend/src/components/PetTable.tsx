@@ -51,7 +51,7 @@ export default function PetTable({ pets, ownersMap, onViewOwner, onDeletePet }: 
                   {pet.ownerId !== undefined ? (
                     <>
                       <button
-                        onClick={() => onViewOwner(pet.ownerId)}
+                        onClick={() => onViewOwner(pet.ownerId!)}
                         className="bg-indigo-500 hover:bg-indigo-600 text-white px-3 py-1 rounded focus:outline-none focus:ring-2 focus:ring-indigo-400 transition"
                         aria-label={`View owner of ${pet.name}`}
                       >
