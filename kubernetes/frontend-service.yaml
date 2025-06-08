@@ -2,12 +2,12 @@ apiVersion: v1
 kind: Service
 metadata:
   name: react-service
+  namespace: petapp-main
 spec:
-  selector:
-    app: react-app
-  ports:
-    - protocol: TCP
-      port: 80
-      targetPort: 80
-      nodePort: 30414
   type: NodePort
+  selector:
+    app: react
+  ports:
+    - port: 80
+      targetPort: 80
+      nodePort: 30080
