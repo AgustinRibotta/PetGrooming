@@ -40,7 +40,6 @@ export default function Owners() {
     }
   }
 
-  // Función para editar: navegar a la ruta de edición
   const handleEdit = (id: number) => {
     navigate(`/edit-client/${id}`);
   };
@@ -49,27 +48,35 @@ export default function Owners() {
     owner.name.toLowerCase().includes(nameFilter.toLowerCase())
   );
 
-  if (loading) return <p className="p-6 text-center">Loading owners...</p>;
-  if (error) return <p className="p-6 text-center text-red-600">{error}</p>;
-
   return (
-    <div className="max-w-5xl mx-auto p-6 bg-white rounded shadow-md mt-8">
+    <div className="max-w-5xl mx-auto p-6 bg-white rounded shadow-md mt-8 animate-fadeIn">
       <h1 className="text-3xl font-bold mb-6 text-indigo-600">Owner List</h1>
 
-      <input
-        type="text"
-        placeholder="Search by owner name"
-        value={nameFilter}
-        onChange={(e) => setNameFilter(e.target.value)}
-        className="mb-4 px-4 py-2 border border-gray-300 rounded w-full"
-      />
+      <div className="relative mb-4">
+        <input
+          type="text"
+          placeholder="Search by owner name"
+          value={nameFilter}
+          onChange={(e) => setNameFilter(e.target.value)}
+          className="w-full px-10 py-2 border border-gray-300 rounded focus:outline-indigo-500 focus:ring-1 focus:ring-indigo-500 transition"
+        />
+        <span className="absolute left-3 top-2.5 text-gray-400 pointer-events-none">🔍</span>
+      </div>
 
-      <OwnerTable
-        owners={filteredOwners}
-        onView={(id) => navigate(`/owners/${id}`)}
-        onDelete={handleDelete}
-        onEdit={handleEdit}
-      />
+      {loading ? (
+        <p className="text-center text-indigo-600 font-semibold py-10">Loading owners...</p>
+      ) : error ? (
+        <p className="text-center text-red-600 py-10">{error}</p>
+      ) : filteredOwners.length === 0 ? (
+        <p className="text-center text-gray-500 italic py-10">No owners match your search.</p>
+      ) : (
+        <OwnerTable
+          owners={filteredOwners}
+          onView={(id) => navigate(`/owners/${id}`)}
+          onDelete={handleDelete}
+          onEdit={handleEdit}
+        />
+      )}
     </div>
   );
 }
