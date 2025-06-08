@@ -17,7 +17,7 @@ spec:
           image: agustinribotta/hairdresin-frontend:20250608155546
           imagePullPolicy: Always 
           ports:
-            - containerPort: 3000
+            - containerPort: 80
 
 
 
