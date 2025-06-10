@@ -7,10 +7,10 @@ export default function Home() {
       <div className="absolute -top-4 -left-4 w-10 h-10 bg-indigo-100 rounded-full opacity-50 pointer-events-none"></div>
       <div className="absolute -bottom-4 -right-4 w-16 h-16 bg-green-100 rounded-full opacity-30 pointer-events-none"></div>
 
-      <h1 className="text-4xl font-bold text-indigo-600 mb-4 flex items-center gap-2">
+      {/* <h1 className="text-4xl font-bold text-indigo-600 mb-4 flex items-center gap-2">
         <span>🐶</span> 
         Welcome to Doggy Grooming App
-      </h1>
+      </h1> */}
 
       <p className="mb-6 text-gray-700 text-lg">
         Manage your furry friends' grooming appointments easily and keep them looking fabulous!
