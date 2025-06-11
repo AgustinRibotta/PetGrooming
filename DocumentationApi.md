@@ -1,8 +1,3 @@
----
-
-# 📘 API Documentation – Pet & Owner Management System
-
-**Base URL:** `http://localhost:8080/api`
 
 ---
 
