@@ -1,5 +1,7 @@
 package com.api.backend.dto;
 
+import java.time.LocalDateTime;
+
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -31,6 +33,9 @@ public class PetDTO {
     private String specialAttention;
 
     private String observations;
+
+    @NotNull(message = "Shit Data is required.")
+    private LocalDateTime shidtDateTime;
 
     @NotNull(message = "Owner ID is required.")
     private Long ownerId;

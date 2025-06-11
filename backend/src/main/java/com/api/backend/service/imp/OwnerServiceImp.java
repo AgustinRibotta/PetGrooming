@@ -47,6 +47,7 @@ public class OwnerServiceImp implements OwnerService {
                     pet.getAllergic(),
                     pet.getSpecial_attention(),
                     pet.getObservations(),
+                    pet.getShidtDateTime(),
                     owner.getId()
                 ))
                 .collect(Collectors.toList());

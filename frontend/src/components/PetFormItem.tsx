@@ -9,6 +9,14 @@ type Props = {
 };
 
 export default function PetFormItem({ pet, index, onChange, onRemove, canRemove }: Props) {
+  const toDateTimeLocal = (isoString?: string) => {
+    if (!isoString) return "";
+    const date = new Date(isoString);
+    const offset = date.getTimezoneOffset();
+    const localDate = new Date(date.getTime() - offset * 60 * 1000);
+    return localDate.toISOString().slice(0, 16);
+  };
+
   return (
     <div className="mb-6 p-4 border border-gray-300 rounded relative bg-white shadow-sm transition animate-fadeIn">
       {canRemove && (
@@ -21,7 +29,19 @@ export default function PetFormItem({ pet, index, onChange, onRemove, canRemove 
           &times;
         </button>
       )}
-
+      <div className="mb-3">
+        <label htmlFor={`petShiftDateTime${index}`} className="block font-semibold mb-1">
+          Appointment Date and Time
+        </label>
+        <input
+          id={`petShiftDateTime${index}`}
+          type="datetime-local"
+          value={toDateTimeLocal(pet.shidtDateTime)} 
+          onChange={(e) => onChange(index, "shidtDateTime", e.target.value)}
+          className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-400 transition"
+          required
+        />
+      </div>
       <div className="mb-3">
         <label htmlFor={`petName${index}`} className="block font-semibold mb-1">
           Name *
@@ -66,7 +86,7 @@ export default function PetFormItem({ pet, index, onChange, onRemove, canRemove 
         <label className="flex items-center gap-2">
           <input
             type="checkbox"
-            checked={pet.allergic}
+            checked={!!pet.allergic}
             onChange={(e) => onChange(index, "allergic", e.target.checked)}
             className="accent-indigo-600"
           />
@@ -76,7 +96,7 @@ export default function PetFormItem({ pet, index, onChange, onRemove, canRemove 
         <label className="flex items-center gap-2">
           <input
             type="checkbox"
-            checked={pet.specialAttention}
+            checked={!!pet.specialAttention}
             onChange={(e) => onChange(index, "specialAttention", e.target.checked)}
             className="accent-indigo-600"
           />

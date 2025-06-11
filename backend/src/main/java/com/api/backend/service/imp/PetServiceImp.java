@@ -40,6 +40,7 @@ public class PetServiceImp implements PetService {
                                 pet.getAllergic(),
                                 pet.getSpecial_attention(),
                                 pet.getObservations(),
+                                pet.getShidtDateTime(),
                                 pet.getOneOwner() != null ? pet.getOneOwner().getId() : null
                             ))
                             .collect(Collectors.toList());  
@@ -57,6 +58,7 @@ public class PetServiceImp implements PetService {
                             p.getAllergic(),
                             p.getSpecial_attention(), 
                             p.getObservations(),
+                            p.getShidtDateTime(),
                             p.getOneOwner() != null ? p.getOneOwner().getId() : null
 
                          )).orElse(null);
@@ -72,21 +74,19 @@ public class PetServiceImp implements PetService {
         Pet pet;
 
         if (petDTO.getId() != null) {
-            // EDITAR: buscamos la mascota existente
             pet = petRepository.findById(petDTO.getId())
                     .orElseThrow(() -> new RuntimeException("Pet with id " + petDTO.getId() + " not found"));
         } else {
-            // CREAR: mascota nueva
             pet = new Pet();
         }
 
-        // Seteamos los campos comunes
         pet.setName(petDTO.getName());
         pet.setRace(petDTO.getRace());
         pet.setColor(petDTO.getColor());
         pet.setAllergic(petDTO.getAllergic());
         pet.setSpecial_attention(petDTO.getSpecialAttention());
         pet.setObservations(petDTO.getObservations());
+        pet.setShidtDateTime(petDTO.getShidtDateTime());
 
         // Cargamos el dueño si es necesario
         if (pet.getOneOwner() == null || !pet.getOneOwner().getId().equals(petDTO.getOwnerId())) {
@@ -105,6 +105,7 @@ public class PetServiceImp implements PetService {
             savedPet.getAllergic(),
             savedPet.getSpecial_attention(),
             savedPet.getObservations(),
+            savedPet.getShidtDateTime(),
             savedPet.getOneOwner().getId()
         );
     }
