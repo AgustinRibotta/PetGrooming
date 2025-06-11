@@ -7,6 +7,6 @@ export type PetDTO = {
   allergic?: boolean;
   specialAttention: boolean;
   observations: string;
-  shidtDateTime: string; 
+  shidtDateTime?: string; 
 };
 
