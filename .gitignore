@@ -57,3 +57,4 @@ build/
 ### Env ###
 .env
 app-secret.yaml
+set-env.sh

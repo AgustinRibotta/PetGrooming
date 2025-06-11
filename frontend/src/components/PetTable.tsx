@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 type Pet = {
@@ -5,6 +6,7 @@ type Pet = {
   name: string;
   race: string;
   ownerId?: number;
+  shidtDateTime?: string;
 };
 
 type PetTableProps = {
@@ -16,6 +18,7 @@ type PetTableProps = {
 
 export default function PetTable({ pets, ownersMap, onViewOwner, onDeletePet }: PetTableProps) {
   const navigate = useNavigate();
+  const [filter, setFilter] = useState<"all" | "past" | "today" | "future">("all");
 
   const handleDelete = (petId?: number) => {
     if (petId !== undefined) {
@@ -25,11 +28,82 @@ export default function PetTable({ pets, ownersMap, onViewOwner, onDeletePet }: 
     }
   };
 
+  function classifyDate(shidtDateTime?: string) {
+    if (!shidtDateTime || isNaN(Date.parse(shidtDateTime))) return "unknown";
+
+    const now = new Date();
+    const date = new Date(shidtDateTime);
+
+    const isSameDate =
+      date.getFullYear() === now.getFullYear() &&
+      date.getMonth() === now.getMonth() &&
+      date.getDate() === now.getDate();
+
+    if (date < now && !isSameDate) {
+      return "past";
+    } else if (isSameDate) {
+      return "today";
+    } else {
+      return "future";
+    }
+  }
+
+  function getRowClass(shidtDateTime?: string) {
+    const classification = classifyDate(shidtDateTime);
+    switch (classification) {
+      case "past":
+        return "bg-green-100";
+      case "today":
+        return "bg-yellow-100";
+      case "future":
+        return "bg-blue-100";
+      default:
+        return "";
+    }
+  }
+
+  const filteredPets = [...pets]
+    .filter((pet) => {
+      if (filter === "all") return true;
+      return classifyDate(pet.shidtDateTime) === filter;
+    })
+    .sort((a, b) => {
+      const dateA = a.shidtDateTime ? Date.parse(a.shidtDateTime) : 0;
+      const dateB = b.shidtDateTime ? Date.parse(b.shidtDateTime) : 0;
+      return dateA - dateB;
+    });
+
+  const legendButtonClass = (type: string) =>
+    `flex items-center space-x-2 cursor-pointer select-none ${
+      filter === type ? "font-semibold underline" : "opacity-70 hover:opacity-100"
+    }`;
+
   return (
     <div className="overflow-x-auto">
+      <div className="mb-4 flex space-x-6">
+        <div className={legendButtonClass("all")} onClick={() => setFilter("all")} role="button" tabIndex={0} onKeyDown={e => e.key === "Enter" && setFilter("all")}>
+          <div className="w-5 h-5 border border-gray-400 rounded bg-gray-100"></div>
+          <span className="text-sm text-gray-700">All</span>
+        </div>
+
+        <div className={legendButtonClass("past")} onClick={() => setFilter("past")} role="button" tabIndex={0} onKeyDown={e => e.key === "Enter" && setFilter("past")}>
+          <div className="w-5 h-5 bg-green-100 border border-green-300 rounded"></div>
+          <span className="text-sm text-gray-700">Completed (Past)</span>
+        </div>
+        <div className={legendButtonClass("today")} onClick={() => setFilter("today")} role="button" tabIndex={0} onKeyDown={e => e.key === "Enter" && setFilter("today")}>
+          <div className="w-5 h-5 bg-yellow-100 border border-yellow-300 rounded"></div>
+          <span className="text-sm text-gray-700">Today</span>
+        </div>
+        <div className={legendButtonClass("future")} onClick={() => setFilter("future")} role="button" tabIndex={0} onKeyDown={e => e.key === "Enter" && setFilter("future")}>
+          <div className="w-5 h-5 bg-blue-100 border border-blue-300 rounded"></div>
+          <span className="text-sm text-gray-700">Upcoming (Future)</span>
+        </div>
+      </div>
+
       <table className="min-w-full border-collapse border border-gray-300">
         <thead>
           <tr className="bg-indigo-100">
+            <th className="border border-gray-300 px-4 py-2 text-left">Appointment Date and Time</th>
             <th className="border border-gray-300 px-4 py-2 text-left">Name</th>
             <th className="border border-gray-300 px-4 py-2 text-left">Race</th>
             <th className="border border-gray-300 px-4 py-2 text-left">Owner</th>
@@ -37,18 +111,30 @@ export default function PetTable({ pets, ownersMap, onViewOwner, onDeletePet }: 
           </tr>
         </thead>
         <tbody>
-          {pets.length > 0 ? (
-            pets.map((pet) => (
-              <tr key={pet.id ?? `${pet.name}-${pet.race}-${Math.random()}`} className="hover:bg-indigo-50">
+          {filteredPets.length > 0 ? (
+            filteredPets.map((pet) => (
+              <tr
+                key={pet.id ?? `${pet.name}-${pet.race}-${Math.random()}`}
+                className={`${getRowClass(pet.shidtDateTime)}`}
+              >
+                <td className="border border-gray-300 px-4 py-2">
+                  {pet.shidtDateTime && !isNaN(Date.parse(pet.shidtDateTime))
+                    ? new Intl.DateTimeFormat("en-US", {
+                        year: "numeric",
+                        month: "short",
+                        day: "numeric",
+                        hour: "2-digit",
+                        minute: "2-digit",
+                      }).format(new Date(pet.shidtDateTime))
+                    : "-"}
+                </td>
                 <td className="border border-gray-300 px-4 py-2">{pet.name}</td>
                 <td className="border border-gray-300 px-4 py-2">{pet.race}</td>
                 <td className="border border-gray-300 px-4 py-2">
-                  {pet.ownerId !== undefined
-                    ? ownersMap[pet.ownerId] ?? "Loading..."
-                    : "Owner info missing"}
+                  {pet.ownerId != null ? ownersMap[pet.ownerId] ?? "Loading..." : "Owner info missing"}
                 </td>
                 <td className="border border-gray-300 px-4 py-2 space-x-2">
-                  {pet.ownerId !== undefined ? (
+                  {pet.ownerId != null ? (
                     <>
                       <button
                         onClick={() => onViewOwner(pet.ownerId!)}
@@ -80,7 +166,7 @@ export default function PetTable({ pets, ownersMap, onViewOwner, onDeletePet }: 
             ))
           ) : (
             <tr>
-              <td colSpan={4} className="text-center py-4 text-gray-500">
+              <td colSpan={5} className="text-center py-4 text-gray-500">
                 No pets found matching your criteria.
               </td>
             </tr>

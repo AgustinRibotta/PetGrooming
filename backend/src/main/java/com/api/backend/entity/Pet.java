@@ -1,5 +1,7 @@
 package com.api.backend.entity;
 
+import java.time.LocalDateTime;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -27,6 +29,7 @@ public class Pet {
     private String allergic;
     private String special_attention;
     private String observations;
+    private LocalDateTime shidtDateTime;
 
     @ManyToOne
     @JoinColumn(name = "owner_id",  nullable = false)

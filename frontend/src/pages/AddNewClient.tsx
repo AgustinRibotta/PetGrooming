@@ -18,6 +18,7 @@ export default function AddNewClient() {
       allergic: false,
       specialAttention: false,
       observations: "",
+      shidtDateTime: new Date().toISOString(),
     },
   ]);
   const [error, setError] = useState<string | null>(null);
@@ -50,6 +51,7 @@ export default function AddNewClient() {
         allergic: false,
         specialAttention: false,
         observations: "",
+        shidtDateTime: new Date().toISOString(),
       },
     ]);
   };
@@ -107,6 +109,7 @@ export default function AddNewClient() {
           allergic: false,
           specialAttention: false,
           observations: "",
+          shidtDateTime: new Date().toISOString(),
         },
       ]);
     } catch (err) {

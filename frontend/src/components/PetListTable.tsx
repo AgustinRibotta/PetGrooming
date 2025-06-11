@@ -15,6 +15,7 @@ export default function PetListTable({ pets, onDelete }: PetListTableProps) {
       <table className="min-w-full border-collapse border border-gray-300">
         <thead>
           <tr className="bg-indigo-100">
+            <th className="border border-gray-300 px-4 py-2 text-left">Appointment Date and Time</th>
             <th className="border border-gray-300 px-4 py-2 text-left">Name</th>
             <th className="border border-gray-300 px-4 py-2 text-left">Race</th>
             <th className="border border-gray-300 px-4 py-2 text-left">Color</th>
@@ -27,6 +28,17 @@ export default function PetListTable({ pets, onDelete }: PetListTableProps) {
         <tbody>
           {pets.map((pet) => (
             <tr key={pet.id ?? `${pet.name}-${pet.race}-${Math.random()}`} className="hover:bg-indigo-50 transition">
+              <td className="border border-gray-300 px-4 py-2">
+                {pet.shidtDateTime && !isNaN(Date.parse(pet.shidtDateTime))
+                  ? new Intl.DateTimeFormat("en-US", {
+                      year: "numeric",
+                      month: "short",
+                      day: "numeric",
+                      hour: "2-digit",
+                      minute: "2-digit",
+                    }).format(new Date(pet.shidtDateTime))
+                  : "-"}
+              </td>
               <td className="border border-gray-300 px-4 py-2">{pet.name}</td>
               <td className="border border-gray-300 px-4 py-2">{pet.race}</td>
               <td className="border border-gray-300 px-4 py-2">{pet.color}</td>
