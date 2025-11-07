@@ -56,5 +56,5 @@ build/
 
 ### Env ###
 .env
-app-secret.yaml
+mysql-secret.yaml
 set-env.sh
