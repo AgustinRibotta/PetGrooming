@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: react-app
-          image: agustinribotta/hairdresin-frontend:20251107184908
+          image: agustinribotta/hairdresin-frontend:20251210205807
           imagePullPolicy: Always 
           ports:
             - containerPort: 80
