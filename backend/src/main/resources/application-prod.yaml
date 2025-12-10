@@ -9,9 +9,13 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
 
   jpa:
+    database-platform: org.hibernate.dialect.MySQLDialect
     hibernate:
       ddl-auto: update
-    database-platform: org.hibernate.dialect.MySQLDialect
-
+    defer-datasource-initialization: true
+  sql:
+    init:
+      mode: always
+      
 server:
   port: ${SERVER_PORT}
